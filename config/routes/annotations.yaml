@@ -1,0 +1,6 @@
+controllers:
+    resource: ../../src/JobBag/Controller/
+    type: annotation
+    prefix:
+        en: '' # don't prefix URLs for English, the default locale
+        es: '/es'
