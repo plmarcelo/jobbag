@@ -28,6 +28,8 @@ class DefaultController extends AbstractController
             echo $o . '<br/>';
         }
 
-        return 'End: Pull code from BitBucket<br/>';
+        echo 'End: Pull code from BitBucket<br/>';
+
+        exit;
     }
 }
