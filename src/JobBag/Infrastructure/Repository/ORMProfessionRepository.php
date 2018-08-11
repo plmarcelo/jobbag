@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Profession[]    findAll()
  * @method Profession[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DoctrineProfessionRepository extends ServiceEntityRepository implements ProfessionRepository
+class ORMProfessionRepository extends ServiceEntityRepository implements ProfessionRepository
 {
     public function __construct(RegistryInterface $registry)
     {

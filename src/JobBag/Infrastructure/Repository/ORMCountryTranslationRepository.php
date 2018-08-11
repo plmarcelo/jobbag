@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method CountryTranslation[]    findAll()
  * @method CountryTranslation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DoctrineCountryTranslationRepository extends ServiceEntityRepository implements CountryTranslationRepository
+class ORMCountryTranslationRepository extends ServiceEntityRepository implements CountryTranslationRepository
 {
     public function __construct(RegistryInterface $registry)
     {

@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Employee[]    findAll()
  * @method Employee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DoctrineEmployeeRepository extends ServiceEntityRepository implements EmployeeRepository
+class ORMEmployeeRepository extends ServiceEntityRepository implements EmployeeRepository
 {
     public function __construct(RegistryInterface $registry)
     {
