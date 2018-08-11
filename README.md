@@ -1,3 +1,5 @@
 # JobBagApi
 
-Probando uploads automáticos a Hostgator
+Probando uploads automáticos a Hostgator.
+
+Actualización 1
