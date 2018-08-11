@@ -16,4 +16,18 @@ class DefaultController extends AbstractController
             'name' => 'World',
         ]);
     }
+    /**
+     * @Route("/synchronize", name="synchronize-git")
+     */
+    public function pull()
+    {
+        echo 'Begin: Pull code from BitBucket<br/>';
+        exec('git pull git@bitbucket.org:jobbag/jobbagapi.git', $output);
+
+        foreach ($output as $o) {
+            echo $o . '<br/>';
+        }
+
+        return 'End: Pull code from BitBucket<br/>';
+    }
 }
