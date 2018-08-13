@@ -5,6 +5,7 @@ namespace JobBag\Domain\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Language
@@ -141,11 +142,19 @@ class Language
         $this->scholarship = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @Groups("language")
+     * @return null|string
+     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
+    /**
+     * @Groups("language")
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
