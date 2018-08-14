@@ -11,4 +11,11 @@ interface CountryTranslationRepository
      * @return CountryTranslation[]
      */
     public function findByLanguageId($languageId = null);
+
+    /**
+     * @param string|null $id
+     * @param string|null $languageId
+     * @return CountryTranslation|null
+     */
+    public function findOneByIdAndLanguageId($id, $languageId = null);
 }

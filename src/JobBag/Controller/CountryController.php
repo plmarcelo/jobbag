@@ -25,10 +25,20 @@ class CountryController extends AbstractController
     /**
      * @Route("/country", name="country_list", methods={"GET"})
      */
-    public function index($_locale)
+    public function list($_locale)
     {
         $countries = $this->countriesFetcher->fetch($_locale);
 
         return $this->json($countries, 200, [], ['groups' => ['country']]);
+    }
+
+    /**
+     * @Route("/country/{id}", name="country", methods={"GET"})
+     */
+    public function show($id, $_locale)
+    {
+        $country = $this->countriesFetcher->fetchById($id, $_locale);
+
+        return $this->json($country, 200, [], ['groups' => ['country']]);
     }
 }

@@ -24,8 +24,13 @@ class FetchCountriesList
     /**
      * @return CountryTranslation[]
      */
-    public function fetch($language = null)
+    public function fetch($languageId = null)
     {
-        return $this->countryRepository->findByLanguageId($language);
+        return $this->countryRepository->findByLanguageId($languageId);
+    }
+
+    public function fetchById($id, $languageId)
+    {
+        return $this->countryRepository->findOneByIdAndLanguageId($id, $languageId);
     }
 }
