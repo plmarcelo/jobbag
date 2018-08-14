@@ -43,7 +43,7 @@ class ORMCountryTranslationRepository extends ServiceEntityRepository implements
         $languageId = $languageId ?: 'en';
 
         return $this->findOneBy([
-            'country_id' => $id,
+            'country' => $id,
             'language'   => $languageId
         ]);
     }
