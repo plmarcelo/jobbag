@@ -62,9 +62,9 @@ class ScholarshipTranslation
 
     /**
      * @Groups("scholarship")
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): ?string
     {
         return $this->scholarship->getId();
     }
