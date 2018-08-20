@@ -3,6 +3,7 @@
 namespace JobBag\Controller;
 
 use JobBag\Application\Employee\SearchByProfessionAndState;
+use JobBag\Domain\Entity\Employee;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,5 +37,19 @@ class EmployeeController extends AbstractController
         $employees = $this->employeSearcher->search($provinceId, $professionId);
 
         return $this->json($employees, 200, [], ['groups' => ['employee']]);
+    }
+
+    /**
+     * @Route("/employee", name="create_employee", methods={"POST"})
+     * @param Request $request
+     * @return mixed
+     */
+    public function create(Request $request)
+    {
+        $data = $request->getContent();
+
+        $employee = $this->get('serializer')->deserialize($data, Employee::class, 'json');
+
+        return $this->json($employee);
     }
 }
