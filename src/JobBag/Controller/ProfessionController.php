@@ -6,6 +6,11 @@ use JobBag\Application\Profession\FetchProfessionsList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ProfessionController
+ * @package JobBag\Controller
+ * @Route("/professions")
+ */
 class ProfessionController extends AbstractController
 {
     /**
@@ -23,7 +28,7 @@ class ProfessionController extends AbstractController
     }
 
     /**
-     * @Route("/profession", name="profession_list", methods={"GET"})
+     * @Route("/", name="profession_list", methods={"GET"})
      */
     public function index($_locale = null)
     {

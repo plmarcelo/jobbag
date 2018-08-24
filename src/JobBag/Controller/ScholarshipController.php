@@ -6,6 +6,11 @@ use JobBag\Application\Scholarship\FetchScholarshipsList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ScholarshipController
+ * @package JobBag\Controller
+ * @Route("/scholarships")
+ */
 class ScholarshipController extends AbstractController
 {
     /**
@@ -23,7 +28,7 @@ class ScholarshipController extends AbstractController
     }
 
     /**
-     * @Route("/scholarship", name="scholarship_list", methods={"GET"})
+     * @Route("/", name="scholarship_list", methods={"GET"})
      */
     public function index($_locale = null)
     {

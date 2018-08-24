@@ -6,6 +6,11 @@ use JobBag\Application\Province\FetchProvincesList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ProvinceController
+ * @package JobBag\Controller
+ * @Route("/provinces")
+ */
 class ProvinceController extends AbstractController
 {
     /**
@@ -23,7 +28,7 @@ class ProvinceController extends AbstractController
     }
 
     /**
-     * @Route("/province", name="province_list", methods={"GET"})
+     * @Route("/", name="province_list", methods={"GET"})
      * @param string $_locale
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
