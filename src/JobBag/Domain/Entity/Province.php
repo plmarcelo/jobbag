@@ -4,6 +4,7 @@ namespace JobBag\Domain\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Province
@@ -62,11 +63,19 @@ class Province
         $this->language = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @return null|string
+     * @Groups({"employee"})
+     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     * @Groups({"employee"})
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -79,6 +88,9 @@ class Province
         return $this;
     }
 
+    /**
+     * @return Country|null
+     */
     public function getCountry(): ?Country
     {
         return $this->country;

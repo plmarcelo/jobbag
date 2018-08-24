@@ -2,7 +2,6 @@
 
 namespace JobBag\Domain\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,6 +14,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Person
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -104,8 +112,6 @@ class Person
     /**
      * @var User
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -141,7 +147,7 @@ class Person
      */
     public function getId()
     {
-        return $this->user->getId();
+        return $this->id;
     }
 
     public function getName(): ?string
@@ -255,6 +261,10 @@ class Person
         return $this;
     }
 
+    /**
+     * @return Country|null
+     * @Groups({"employee"})
+     */
     public function getCountry(): ?Country
     {
         return $this->country;
@@ -267,6 +277,10 @@ class Person
         return $this;
     }
 
+    /**
+     * @return Province|null
+     * @Groups({"employee"})
+     */
     public function getProvince(): ?Province
     {
         return $this->province;
@@ -330,6 +344,10 @@ class Person
      */
     public function getCountryName()
     {
+        if (! $this->country) {
+            $this->country = new Country();
+        }
+
         return $this->country->getName();
     }
 
@@ -338,6 +356,10 @@ class Person
      */
     public function getProvinceName()
     {
+        if (! $this->province) {
+            $this->province = new Province();
+        }
+
         return $this->province->getName();
     }
 
@@ -346,6 +368,25 @@ class Person
      */
     public function getCityName()
     {
+        if (! $this->city) {
+            $this->city = new City();
+        }
+
         return $this->city->getName();
+    }
+
+    /**
+     * @param string $email
+     * @return Person
+     */
+    public function setEmail($email)
+    {
+        if (! $this->user) {
+            $this->user = new User();
+        }
+
+        $this->user->setUsername($email);
+
+        return $this;
     }
 }

@@ -66,7 +66,7 @@ class CountryTranslation
      */
     public function getId(): string
     {
-        return $this->country->getId();
+        return $this->getCountry()->getId();
     }
 
     /**

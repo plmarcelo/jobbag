@@ -55,11 +55,30 @@ class Scholarship
         $this->language = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @return null|string
+     * @Groups({"employee"})
+     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
+    /**
+     * @param string $id
+     * @return Scholarship
+     */
+    public function setId(string $id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     * @Groups({"employee"})
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -97,5 +116,4 @@ class Scholarship
 
         return $this;
     }
-
 }

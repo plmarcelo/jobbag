@@ -4,6 +4,7 @@ namespace JobBag\Domain\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * City
@@ -62,11 +63,19 @@ class City
         $this->language = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     * @Groups({"employee"})
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     * @Groups({"employee"})
+     */
     public function getName(): ?string
     {
         return $this->name;

@@ -54,7 +54,18 @@ class Country
     }
 
     /**
-     * @Groups("country")
+     * @param string $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @Groups({"country","employee"})
      * @return null|string
      */
     public function getId(): ?string
@@ -63,7 +74,7 @@ class Country
     }
 
     /**
-     * @Groups("country")
+     * @Groups({"country","employee"})
      * @return null|string
      */
     public function getName(): ?string

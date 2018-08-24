@@ -21,34 +21,6 @@ class ORMEmployeeRepository extends ServiceEntityRepository implements EmployeeR
         parent::__construct($registry, Employee::class);
     }
 
-//    /**
-//     * @return Employee[] Returns an array of Employee objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Employee
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
     /**
      * @param string $provinceId
      * @param int $professionId
@@ -57,11 +29,16 @@ class ORMEmployeeRepository extends ServiceEntityRepository implements EmployeeR
      */
     public function findByProvinceIdAndProfessionId($provinceId, $professionId, $languageId = null)
     {
-        $result = $this->createQueryBuilder('e')
-            ->select('e')
-            ->join('e.person', 'p', 'WITH', 'p.user = e.person')
-            ->andWhere('p.province = :provinceId')
+        $qb = $this->createQueryBuilder('e');
+        $sqb = $this->_em->createQueryBuilder();
+
+        $result = $qb->select('DISTINCT e')
+            ->join('e.person', 'p', 'WITH', 'p = e.person')
+            ->join('e.experience', 'ex', 'WITH', 'ex.employee = e')
+            ->where('p.province = :provinceId')
+            ->andWhere('ex.profession = :professionId')
             ->setParameter('provinceId', $provinceId)
+            ->setParameter('professionId', $professionId)
             ->orderBy('e.person', 'ASC')
             ->setMaxResults(10)
             ->getQuery()

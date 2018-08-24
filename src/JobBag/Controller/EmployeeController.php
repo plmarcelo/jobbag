@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Class EmployeeController
+ * @package JobBag\Controller
+ * @Route("/employees")
+ */
 class EmployeeController extends AbstractController
 {
     /**
@@ -27,20 +32,22 @@ class EmployeeController extends AbstractController
     }
 
     /**
-     * @Route("/employee/search/{provinceId}/{professionId}", name="search_employee", methods={"GET"})
-     * @param string $provinceId
-     * @param int $professionId
+     * @Route("/", name="search_employee", methods={"GET"})
+     * @param Request $request
      * @return JsonResponse
      */
-    public function search($provinceId, $professionId)
+    public function search(Request $request)
     {
+        $provinceId = $request->get('province_id');
+        $professionId = $request->get('profession_id');
+
         $employees = $this->employeSearcher->search($provinceId, $professionId);
 
         return $this->json($employees, 200, [], ['groups' => ['employee']]);
     }
 
     /**
-     * @Route("/employee", name="create_employee", methods={"POST"})
+     * @Route("/", name="create_employee", methods={"POST"})
      * @param Request $request
      * @return mixed
      */
@@ -50,6 +57,6 @@ class EmployeeController extends AbstractController
 
         $employee = $this->get('serializer')->deserialize($data, Employee::class, 'json');
 
-        return $this->json($employee);
+        return $this->json($employee, 200, [], ['groups' => ['employee']]);
     }
 }

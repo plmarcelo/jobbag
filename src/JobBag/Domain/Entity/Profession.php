@@ -84,7 +84,7 @@ class Profession
     }
 
     /**
-     * @Groups("profession")
+     * @Groups({"profession","employee"})
      * @return int|null
      */
     public function getId(): ?int
@@ -93,7 +93,7 @@ class Profession
     }
 
     /**
-     * @Groups("profession")
+     * @Groups({"profession","employee"})
      * @return null|string
      */
     public function getName(): ?string
@@ -197,5 +197,4 @@ class Profession
 
         return $this;
     }
-
 }
