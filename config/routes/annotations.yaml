@@ -1,7 +1,11 @@
 controllers:
-    resource: ../../src/JobBag/Controller/
+    resource: ../../src/JobBag/Controller
     type: annotation
+#    prefix:
+#        en: '{version<v[1]>?1}' # don't prefix URLs for English, the default locale
+#        es: '{version<v[1]>?1}/es'
+#        fr: '{version<v[1]>?1}/fr'
     prefix:
-        en: '{version<v[1]>?1}' # don't prefix URLs for English, the default locale
-        es: '{version<v[1]>?1}/es'
-        fr: '{version<v[1]>?1}/fr'
+        en: '' # don't prefix URLs for English, the default locale
+        es: 'es'
+        fr: 'fr'

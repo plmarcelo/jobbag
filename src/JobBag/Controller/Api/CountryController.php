@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller;
+namespace JobBag\Controller\Api;
 
 use JobBag\Application\Country\FetchCountriesList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

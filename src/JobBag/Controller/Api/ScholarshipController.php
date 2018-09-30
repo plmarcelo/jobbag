@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller;
+namespace JobBag\Controller\Api;
 
 use JobBag\Application\Scholarship\FetchScholarshipsList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

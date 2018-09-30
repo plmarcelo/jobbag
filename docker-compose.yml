@@ -2,8 +2,7 @@ version: '3'
 
 services:
     jobbag_api:
-        build:
-            context: .
+        image: plmarcelo/docker_php72
         ports:
             - 80:80
         volumes:

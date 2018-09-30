@@ -16,4 +16,11 @@ class DefaultController extends AbstractController
             'name' => 'World',
         ]);
     }
+
+    /**
+     * @Route("/login_check", name="api_login_check")
+     */
+    public function loginCheckAction() {
+        return 'Hola';
+    }
 }

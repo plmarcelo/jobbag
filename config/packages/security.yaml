@@ -1,7 +1,11 @@
 security:
+    encoders:
+        JobBag\Domain\Entity\User:
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        db_provider:
+        api_user_provider:
             entity:
                 class: JobBag\Domain\Entity\User
                 property: username
@@ -9,22 +13,39 @@ security:
                 # manager_name: customer
 
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+
+        login:
+            pattern: ^/login
+            stateless: true
+            anonymous: true
+            form_login:
+                check_path: /login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+
+        api:
+            pattern: ^/
+            stateless: true
+            anonymous: false
+            provider: api_user_provider
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+#        main:
 #            anonymous: ~
-            http_basic: ~
-            provider: db_provider
-            user_checker: JobBag\Infrastructure\Security\UserActive
+#            http_basic: ~
+#            provider: db_provider
+#            user_checker: JobBag\Infrastructure\Security\UserActive
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/v1/admin, roles: ROLE_ADMIN }
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
 
-    encoders:
-        JobBag\Domain\Entity\User:
-            algorithm: bcrypt
