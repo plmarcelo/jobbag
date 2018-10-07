@@ -41,20 +41,6 @@ class Language
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="City", mappedBy="language")
-     */
-    private $city;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Country", mappedBy="language")
-     */
-    private $country;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
      * @ORM\ManyToMany(targetEntity="MessageStatus", mappedBy="language")
      */
     private $messageStatus;
@@ -83,9 +69,9 @@ class Language
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Province", mappedBy="language")
+     * @ORM\ManyToMany(targetEntity="Location", mappedBy="language")
      */
-    private $province;
+    private $location;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -128,13 +114,11 @@ class Language
     public function __construct()
     {
         $this->budgetStatus = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->city = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->country = new \Doctrine\Common\Collections\ArrayCollection();
         $this->messageStatus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->user = new \Doctrine\Common\Collections\ArrayCollection();
         $this->profession = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projectStatus = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->province = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->location = new \Doctrine\Common\Collections\ArrayCollection();
         $this->quizAnswer = new \Doctrine\Common\Collections\ArrayCollection();
         $this->quiz = new \Doctrine\Common\Collections\ArrayCollection();
         $this->quizQuestion = new \Doctrine\Common\Collections\ArrayCollection();
@@ -190,62 +174,6 @@ class Language
         if ($this->budgetStatus->contains($budgetStatus)) {
             $this->budgetStatus->removeElement($budgetStatus);
             $budgetStatus->removeLanguage($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|City[]
-     */
-    public function getCity(): Collection
-    {
-        return $this->city;
-    }
-
-    public function addCity(City $city): self
-    {
-        if (!$this->city->contains($city)) {
-            $this->city[] = $city;
-            $city->addLanguage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCity(City $city): self
-    {
-        if ($this->city->contains($city)) {
-            $this->city->removeElement($city);
-            $city->removeLanguage($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Country[]
-     */
-    public function getCountry(): Collection
-    {
-        return $this->country;
-    }
-
-    public function addCountry(Country $country): self
-    {
-        if (!$this->country->contains($country)) {
-            $this->country[] = $country;
-            $country->addLanguage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCountry(Country $country): self
-    {
-        if ($this->country->contains($country)) {
-            $this->country->removeElement($country);
-            $country->removeLanguage($this);
         }
 
         return $this;
@@ -364,28 +292,28 @@ class Language
     }
 
     /**
-     * @return Collection|Province[]
+     * @return Collection|Location[]
      */
-    public function getProvince(): Collection
+    public function getLocation(): Collection
     {
-        return $this->province;
+        return $this->location;
     }
 
-    public function addProvince(Province $province): self
+    public function addLocation(Location $location): self
     {
-        if (!$this->province->contains($province)) {
-            $this->province[] = $province;
-            $province->addLanguage($this);
+        if (!$this->location->contains($location)) {
+            $this->location[] = $location;
+            $location->addLanguage($this);
         }
 
         return $this;
     }
 
-    public function removeProvince(Province $province): self
+    public function removeLocation(Location $location): self
     {
-        if ($this->province->contains($province)) {
-            $this->province->removeElement($province);
-            $province->removeLanguage($this);
+        if ($this->location->contains($location)) {
+            $this->location->removeElement($location);
+            $location->removeLanguage($this);
         }
 
         return $this;

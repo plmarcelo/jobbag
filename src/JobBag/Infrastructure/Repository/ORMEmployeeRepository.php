@@ -30,7 +30,6 @@ class ORMEmployeeRepository extends ServiceEntityRepository implements EmployeeR
     public function findByProvinceIdAndProfessionId($provinceId, $professionId, $languageId = null)
     {
         $qb = $this->createQueryBuilder('e');
-        $sqb = $this->_em->createQueryBuilder();
 
         $result = $qb->select('DISTINCT e')
             ->join('e.person', 'p', 'WITH', 'p = e.person')

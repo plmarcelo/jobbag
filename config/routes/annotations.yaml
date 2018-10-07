@@ -1,11 +1,19 @@
-controllers:
+authentication:
     resource: ../../src/JobBag/Controller
     type: annotation
-#    prefix:
-#        en: '{version<v[1]>?1}' # don't prefix URLs for English, the default locale
-#        es: '{version<v[1]>?1}/es'
-#        fr: '{version<v[1]>?1}/fr'
+
+public_services:
+    resource: ../../src/JobBag/Controller/Pub
+    type: annotation
     prefix:
-        en: '' # don't prefix URLs for English, the default locale
-        es: 'es'
-        fr: 'fr'
+        en: 'pub/{version<v[1]>?1}' # don't prefix URLs for English, the default locale
+        es: 'pub/{version<v[1]>?1}/es'
+        fr: 'pub/{version<v[1]>?1}/fr'
+
+private_services:
+    resource: ../../src/JobBag/Controller/Prv
+    type: annotation
+    prefix:
+        en: 'prv/{version<v[1]>?1}' # don't prefix URLs for English, the default locale
+        es: 'prv/{version<v[1]>?1}/es'
+        fr: 'prv/{version<v[1]>?1}/fr'

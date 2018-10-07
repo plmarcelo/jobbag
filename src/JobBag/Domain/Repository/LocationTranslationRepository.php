@@ -2,20 +2,20 @@
 
 namespace JobBag\Domain\Repository;
 
-use JobBag\Domain\Entity\ProfessionTranslation;
+use JobBag\Domain\Entity\LocationTranslation;
 
-interface ProfessionTranslationRepository
+interface LocationTranslationRepository
 {
     /**
      * @param string $languageId
      * @param int $parentId
-     * @return ProfessionTranslation[]
+     * @return LocationTranslation[]
      */
     public function findByParentId($languageId, $parentId);
 
     /**
      * @param string $languageId
-     * @return ProfessionTranslation[]
+     * @return LocationTranslation[]
      */
     public function findRoots($languageId);
 }

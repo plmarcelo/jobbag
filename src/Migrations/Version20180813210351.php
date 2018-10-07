@@ -12,18 +12,22 @@ final class Version20180813210351 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
-        $this->addSql("INSERT INTO country (id, name) VALUES ('CU', 'Cuba');");
-        $this->addSql("INSERT INTO country (id, name) VALUES ('CA', 'Canada');");
+        $this->addSql("INSERT INTO location (iso_code, name) VALUES ('CU', 'Cuba');");
+        $this->addSql("INSERT INTO location (iso_code, name) VALUES ('CA', 'Canada');");
+        $this->addSql("INSERT INTO location (iso_code, name) VALUES ('ES', 'España');");
 
-        $this->addSql("INSERT INTO country_language (country_id, language_id, name) VALUES ('CU', 'es', 'Cuba');");
-        $this->addSql("INSERT INTO country_language (country_id, language_id, name) VALUES ('CU', 'en', 'Cuba');");
-        $this->addSql("INSERT INTO country_language (country_id, language_id, name) VALUES ('CA', 'es', 'Canadá');");
-        $this->addSql("INSERT INTO country_language (country_id, language_id, name) VALUES ('CA', 'en', 'Canada');");
+        $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT id, 'es', 'Cuba' FROM location where iso_code = 'CU');");
+        $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT id, 'en', 'Cuba' FROM location where iso_code = 'CU');");
+        $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT id, 'es', 'Canadá' FROM location where iso_code = 'CA');");
+        $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT id, 'en', 'Canada' FROM location where iso_code = 'CA');");
+        $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT id, 'es', 'España' FROM location where iso_code = 'ES');");
+        $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT id, 'en', 'Spain' FROM location where iso_code = 'ES');");
     }
 
     public function down(Schema $schema) : void
     {
-        $this->addSql("DELETE FROM country WHERE id = 'CA';");
-        $this->addSql("DELETE FROM country WHERE id = 'CU';");
+        $this->addSql("DELETE FROM location WHERE iso_code = 'CA';");
+        $this->addSql("DELETE FROM location WHERE iso_code = 'CU';");
+        $this->addSql("DELETE FROM location WHERE iso_code = 'ES';");
     }
 }

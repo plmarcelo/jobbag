@@ -60,6 +60,16 @@ class Profession
     private $employee;
 
     /**
+     * @var Profession
+     *
+     * @ORM\ManyToOne(targetEntity="Profession")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * })
+     */
+    private $parent;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Language", inversedBy="profession")
@@ -194,6 +204,25 @@ class Profession
         if ($this->language->contains($language)) {
             $this->language->removeElement($language);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Profession
+     */
+    public function getParent(): Profession
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Profession $parent
+     * @return Profession
+     */
+    public function setParent(Profession $parent): Profession
+    {
+        $this->parent = $parent;
 
         return $this;
     }

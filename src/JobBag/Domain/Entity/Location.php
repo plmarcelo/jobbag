@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Province
+ * Location
  *
- * @ORM\Table(name="province", indexes={@ORM\Index(name="idx_province_country_id", columns={"country_id"})})
+ * @ORM\Table(name="location", indexes={@ORM\Index(name="idx_location_parent_id", columns={"parent_id"})})
  * @ORM\Entity
  */
-class Province
+class Location
 {
     /**
      * @var string
@@ -31,22 +31,29 @@ class Province
     private $name;
 
     /**
-     * @var \Country
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Country")
+     * @ORM\Column(name="iso_code", type="string", length=10, nullable=false)
+     */
+    private $isoCode;
+
+    /**
+     * @var Location
+     *
+     * @ORM\ManyToOne(targetEntity="Location")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      * })
      */
-    private $country;
+    private $parent;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Language", inversedBy="province")
-     * @ORM\JoinTable(name="province_language",
+     * @ORM\ManyToMany(targetEntity="Language", inversedBy="location")
+     * @ORM\JoinTable(name="location_language",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="language_id", referencedColumnName="id")
@@ -89,16 +96,16 @@ class Province
     }
 
     /**
-     * @return Country|null
+     * @return Location|null
      */
-    public function getCountry(): ?Country
+    public function getParent(): ?Location
     {
-        return $this->country;
+        return $this->parent;
     }
 
-    public function setCountry(?Country $country): self
+    public function setParent(?Location $parent): self
     {
-        $this->country = $country;
+        $this->parent = $parent;
 
         return $this;
     }
@@ -125,6 +132,25 @@ class Province
         if ($this->language->contains($language)) {
             $this->language->removeElement($language);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsoCode(): string
+    {
+        return $this->isoCode;
+    }
+
+    /**
+     * @param string $isoCode
+     * @return Location
+     */
+    public function setIsoCode(string $isoCode): Location
+    {
+        $this->isoCode = $isoCode;
 
         return $this;
     }

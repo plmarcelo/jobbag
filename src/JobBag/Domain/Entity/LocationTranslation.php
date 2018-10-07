@@ -7,22 +7,22 @@ use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * CountryTranslation
+ * LocationTranslation
  *
- * @ORM\Table(name="country_language")
+ * @ORM\Table(name="location_language")
  * @ORM\Entity
  */
-class CountryTranslation
+class LocationTranslation
 {
     /**
-     * @var Country
+     * @var Location
      *
-     * @Id @ORM\ManyToOne(targetEntity="Country")
+     * @Id @ORM\ManyToOne(targetEntity="Location")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * })
      */
-    private $country;
+    private $location;
 
     /**
      * @var Language
@@ -42,31 +42,31 @@ class CountryTranslation
     private $name;
 
     /**
-     * @return Country|null
+     * @return Location|null
      */
-    public function getCountry(): ?Country
+    public function getLocation(): ?Location
     {
-        return $this->country;
+        return $this->location;
     }
 
     /**
-     * @param Country|null $country
-     * @return CountryTranslation
+     * @param Location|null $location
+     * @return LocationTranslation
      */
-    public function setCountry(?Country $country): self
+    public function setLocation(?Location $location): self
     {
-        $this->country = $country;
+        $this->location = $location;
 
         return $this;
     }
 
     /**
-     * @Groups("country")
+     * @Groups("location")
      * @return string
      */
     public function getId(): string
     {
-        return $this->getCountry()->getId();
+        return $this->location->getId();
     }
 
     /**
@@ -79,7 +79,7 @@ class CountryTranslation
 
     /**
      * @param Language|null $language
-     * @return CountryTranslation
+     * @return LocationTranslation
      */
     public function setLanguage(?Language $language): self
     {
@@ -89,7 +89,7 @@ class CountryTranslation
     }
 
     /**
-     * @Groups("country")
+     * @Groups("location")
      * @return null|string
      */
     public function getName(): ?string

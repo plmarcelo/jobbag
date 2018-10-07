@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller\Api;
+namespace JobBag\Controller\Pub;
 
 use JobBag\Application\Language\FetchLanguagesList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -13,9 +13,9 @@ security:
                 # manager_name: customer
 
     firewalls:
-#        dev:
-#            pattern: ^/(_(profiler|wdt)|css|images|js)/
-#            security: false
+        #        dev:
+        #            pattern: ^/(_(profiler|wdt)|css|images|js)/
+        #            security: false
 
         login:
             pattern: ^/login
@@ -27,19 +27,25 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
 
-        api:
-            pattern: ^/
+        prv:
+            pattern: ^/prv
             stateless: true
             anonymous: false
             provider: api_user_provider
             guard:
                 authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
-#        main:
-#            anonymous: ~
-#            http_basic: ~
-#            provider: db_provider
-#            user_checker: JobBag\Infrastructure\Security\UserActive
+                - lexik_jwt_authentication.jwt_token_authenticator
+
+        pub:
+            pattern: ^/pub
+            stateless: true
+            anonymous: true
+
+    #        main:
+    #            anonymous: ~
+    #            http_basic: ~
+    #            provider: db_provider
+    #            user_checker: JobBag\Infrastructure\Security\UserActive
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
@@ -47,5 +53,6 @@ security:
     - { path: ^/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/pub,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/prv,       roles: IS_AUTHENTICATED_FULLY }
 

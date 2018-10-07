@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller\Api;
+namespace JobBag\Controller\Prv;
 
 use JobBag\Domain\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

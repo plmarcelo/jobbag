@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller\Api;
+namespace JobBag\Controller\Pub;
 
 use JobBag\Application\Employee\SearchByProfessionAndState;
 use JobBag\Domain\Entity\Employee;

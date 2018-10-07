@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Person
  *
- * @ORM\Table(name="person", indexes={@ORM\Index(name="idx_person_country_id", columns={"country_id"}), @ORM\Index(name="idx_person_province_id", columns={"province_id"}), @ORM\Index(name="idx_person_city_id", columns={"city_id"})})
+ * @ORM\Table(name="person", indexes={@ORM\Index(name="idx_person_country_id", columns={"country_id"}), @ORM\Index(name="idx_person_location_id", columns={"location_id"}), @ORM\Index(name="idx_person_city_id", columns={"city_id"})})
  * @ORM\Entity
  */
 class Person
@@ -45,20 +45,6 @@ class Person
     private $avatar;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="address", type="string", length=100, nullable=true)
-     */
-    private $address;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="zip_code", type="string", length=10, nullable=true)
-     */
-    private $zipCode;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="rate", type="decimal", precision=3, scale=1, nullable=false, options={"default"="0.0"})
@@ -80,34 +66,14 @@ class Person
     private $updatedAt;
 
     /**
-     * @var City
+     * @var Location
      *
-     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\ManyToOne(targetEntity="Location")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * })
      */
-    private $city;
-
-    /**
-     * @var Country
-     *
-     * @ORM\ManyToOne(targetEntity="Country")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     * })
-     */
-    private $country;
-
-    /**
-     * @var Province
-     *
-     * @ORM\ManyToOne(targetEntity="Province")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="province_id", referencedColumnName="id")
-     * })
-     */
-    private $province;
+    private $location;
 
     /**
      * @var User
@@ -189,30 +155,6 @@ class Person
         return $this;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    public function getZipCode(): ?string
-    {
-        return $this->zipCode;
-    }
-
-    public function setZipCode(?string $zipCode): self
-    {
-        $this->zipCode = $zipCode;
-
-        return $this;
-    }
-
     public function getRate()
     {
         return $this->rate;
@@ -249,46 +191,18 @@ class Person
         return $this;
     }
 
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
     /**
-     * @return Country|null
+     * @return Location|null
      * @Groups({"employee"})
      */
-    public function getCountry(): ?Country
+    public function getLocation(): ?Location
     {
-        return $this->country;
+        return $this->location;
     }
 
-    public function setCountry(?Country $country): self
+    public function setLocation(?Location $location): self
     {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return Province|null
-     * @Groups({"employee"})
-     */
-    public function getProvince(): ?Province
-    {
-        return $this->province;
-    }
-
-    public function setProvince(?Province $province): self
-    {
-        $this->province = $province;
+        $this->location = $location;
 
         return $this;
     }
@@ -354,25 +268,13 @@ class Person
     /**
      * @return null|string
      */
-    public function getProvinceName()
+    public function getLocationName()
     {
-        if (! $this->province) {
-            $this->province = new Province();
+        if (! $this->location) {
+            $this->location = new Location();
         }
 
-        return $this->province->getName();
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getCityName()
-    {
-        if (! $this->city) {
-            $this->city = new City();
-        }
-
-        return $this->city->getName();
+        return $this->location->getName();
     }
 
     /**

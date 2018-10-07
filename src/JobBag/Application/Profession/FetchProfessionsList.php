@@ -3,6 +3,7 @@
 namespace JobBag\Application\Profession;
 
 use JobBag\Domain\Entity\Profession;
+use JobBag\Domain\Entity\ProfessionTranslation;
 use JobBag\Domain\Repository\ProfessionRepository;
 use JobBag\Domain\Repository\ProfessionTranslationRepository;
 
@@ -14,20 +15,33 @@ class FetchProfessionsList
     private $professionRepository;
 
     /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    /**
      * FetchProfessionsList constructor.
      * @param ProfessionTranslationRepository $professionRepository
+     * @param string $defaultLocale
      */
-    public function __construct(ProfessionTranslationRepository $professionRepository)
+    public function __construct(ProfessionTranslationRepository $professionRepository, $defaultLocale)
     {
         $this->professionRepository = $professionRepository;
+        $this->defaultLocale = $defaultLocale;
     }
 
     /**
-     * @param string|null $language
-     * @return \JobBag\Domain\Entity\ProfessionTranslation[]
+     * @param string|null $languageId
+     * @return ProfessionTranslation[]
      */
-    public function fetch($language = null)
+    public function fetch($languageId = null, $id = null)
     {
-        return $this->professionRepository->findByLanguageId($language);
+        $languageId = $languageId ?: $this->defaultLocale;
+
+        if ($id === null) {
+            return $this->professionRepository->findRoots($languageId);
+        }
+
+        return $this->professionRepository->findByParentId($languageId, $id);
     }
 }

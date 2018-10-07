@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller\Api;
+namespace JobBag\Controller\Pub;
 
 use JobBag\Application\Profession\FetchProfessionsList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,11 +28,14 @@ class ProfessionController extends AbstractController
     }
 
     /**
-     * @Route("/", name="profession_list", methods={"GET"})
+     * @Route("/{id}", name="profession_list", methods={"GET"})
+     * @param string|null $_locale
+     * @param int|null $id
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function index($_locale = null)
+    public function index($_locale = null, $id = null)
     {
-        $professions = $this->professionsFetcher->fetch($_locale);
+        $professions = $this->professionsFetcher->fetch($_locale, $id);
 
         return $this->json($professions, 200, [], ['groups' => ['profession']]);
     }
