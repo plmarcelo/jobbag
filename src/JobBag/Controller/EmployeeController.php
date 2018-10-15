@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Controller\Pub;
+namespace JobBag\Controller;
 
 use JobBag\Application\Employee\SearchByProfessionAndState;
 use JobBag\Domain\Entity\Employee;
@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -46,16 +47,28 @@ class EmployeeController extends AbstractController
         return $this->json($employees, 200, [], ['groups' => ['employee']]);
     }
 
+
+
     /**
-     * @Route("/", name="create_employee", methods={"POST"})
+     * @Route("", name="create_employee", methods={"POST"})
      * @param Request $request
      * @return mixed
      */
     public function create(Request $request)
     {
+        $entityManager = $this->getDoctrine()->getManager();
+
         $data = $request->getContent();
 
-        $employee = $this->get('serializer')->deserialize($data, Employee::class, 'json');
+        /**
+         * @var Serializer $serializer
+         */
+        $serializer = $this->get('serializer');
+        $employee = $serializer->deserialize($data, Employee::class, 'json');
+
+        $entityManager->persist($employee);
+
+        $entityManager->flush();
 
         return $this->json($employee, 200, [], ['groups' => ['employee']]);
     }

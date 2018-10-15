@@ -6,6 +6,11 @@ use JobBag\Application\Language\FetchLanguagesList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class LanguageController
+ * @package JobBag\Controller\Pub
+ * @Route("/languages")
+ */
 class LanguageController extends AbstractController
 {
     /**
@@ -23,12 +28,12 @@ class LanguageController extends AbstractController
     }
 
     /**
-     * @Route("/language", name="language_list", methods={"GET"})
+     * @Route("/", name="language_list", methods={"GET"})
      */
     public function index()
     {
         $languages = $this->languagesFetcher->fetch();
 
-        return $this->json($languages, 200, [], ['groups' => ['language']]);
+        return $this->json($languages, 200, [], ['groups' => ['public']]);
     }
 }
