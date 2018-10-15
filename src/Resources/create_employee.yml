@@ -1,0 +1,17 @@
+{
+    "email":"user@email.com",
+    "password":"1234",
+    "name":"Name and surname",
+    "locationId":1,
+    "birthdate":"1971-12-09",
+    "avatar":"anAvatar",
+    "experience":[
+    {
+        "professionId":1,
+        "years":2
+    }
+    ],
+    "languageId":"es",
+    "scholarshipId":"EU",
+    "resume":"Employeee resume"
+}
