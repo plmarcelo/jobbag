@@ -14,15 +14,17 @@
         "symfony/framework-bundle": "^4.1",
         "symfony/lts": "^4@dev",
         "symfony/orm-pack": "^1.0",
+        "symfony/property-info": "^4.1",
         "symfony/security-bundle": "^4.1",
         "symfony/serializer": "^4.1",
         "symfony/twig-bundle": "^4.1",
         "symfony/yaml": "^4.1"
     },
     "require-dev": {
+        "codeception/codeception": "^2.5",
+        "fzaninotto/faker": "^1.8",
         "symfony/dotenv": "^4.1",
         "symfony/maker-bundle": "^1.5",
-        "fzaninotto/faker": "^1.8",
         "symfony/profiler-pack": "^1.0"
     },
     "config": {
@@ -38,7 +40,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "JobBag\\Tests\\": "tests/JobBag/"
+            "Tests\\JobBag\\": "tests/unit/"
         }
     },
     "replace": {
@@ -65,7 +67,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false
+            "allow-contrib": true
         }
     }
 }
