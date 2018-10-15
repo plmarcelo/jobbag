@@ -13,22 +13,22 @@ final class Version20181007135705 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // Provincias cubanas
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-01', l.id, 'Pinar del Río' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-03', l.id, 'La Habana' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-04', l.id, 'Matanzas' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-05', l.id, 'Villa Clara' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-06', l.id, 'Cienfuegos' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-07', l.id, 'Sancti Spíritus' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-08', l.id, 'Ciego de Ávila' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-09', l.id, 'Camagüey' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-10', l.id, 'Las Tunas' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-11', l.id, 'Holguín' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-12', l.id, 'Granma' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-13', l.id, 'Santiago de Cuba' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-14', l.id, 'Guantánamo' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-15', l.id, 'Artemisa' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-16', l.id, 'Mayabeque' FROM location l WHERE l.iso_code ='CU');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'CU-99', l.id, 'Isla de la Juventud' FROM location l WHERE l.iso_code ='CU');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-01', 'CU', 'Pinar del Río');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-03', 'CU', 'La Habana');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-04', 'CU', 'Matanzas');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-05', 'CU', 'Villa Clara');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-06', 'CU', 'Cienfuegos');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-07', 'CU', 'Sancti Spíritus');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-08', 'CU', 'Ciego de Ávila');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-09', 'CU', 'Camagüey');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-10', 'CU', 'Las Tunas');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-11', 'CU', 'Holguín');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-12', 'CU', 'Granma');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-13', 'CU', 'Santiago de Cuba');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-14', 'CU', 'Guantánamo');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-15', 'CU', 'Artemisa');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-16', 'CU', 'Mayabeque');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('CU-99', 'CU', 'Isla de la Juventud');");
 
         // Provincias cubanas en español
         $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT l.id, 'es', 'Pinar del Río' FROM location l WHERE l.iso_code ='CU-01');");
@@ -69,6 +69,6 @@ final class Version20181007135705 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
-        $this->addSql("DELETE l FROM location l, location p WHERE l.parent_id = p.id AND p.iso_code = 'CU';");
+        $this->addSql("DELETE FROM location WHERE parent_id IS NULL AND country_id = 'CU';");
     }
 }

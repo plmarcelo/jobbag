@@ -13,25 +13,25 @@ final class Version20181007165737 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // Comunidades españolas
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-AN', l.id, 'Andalucía' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-AR', l.id, 'Aragón' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-AS', l.id, 'Principado de Asturias' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-CN', l.id, 'Canarias' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-CB', l.id, 'Cantabria' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-CL', l.id, 'Castilla y León' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-CM', l.id, 'Castilla La Mancha' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-CT', l.id, 'Cataluña' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-PV', l.id, 'País Vasco' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-EX', l.id, 'Extremadura' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-GA', l.id, 'Galicia' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-IB', l.id, 'Islas Baleares' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-RI', l.id, 'La Rioja' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-MD', l.id, 'Madrid' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-MC', l.id, 'Murcia' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-NC', l.id, 'Navarra' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-VC', l.id, 'Valencia' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-CE', l.id, 'Ceuta' FROM location l WHERE l.iso_code ='ES');");
-        $this->addSql("INSERT INTO location (iso_code, parent_id, name) (SELECT 'ES-ML', l.id, 'Melilla' FROM location l WHERE l.iso_code ='ES');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-AN', 'ES', 'Andalucía');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-AR', 'ES', 'Aragón');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-AS', 'ES', 'Principado de Asturias');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-CN', 'ES', 'Canarias');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-CB', 'ES', 'Cantabria');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-CL', 'ES', 'Castilla y León');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-CM', 'ES', 'Castilla La Mancha');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-CT', 'ES', 'Cataluña');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-PV', 'ES', 'País Vasco');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-EX', 'ES', 'Extremadura');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-GA', 'ES', 'Galicia');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-IB', 'ES', 'Islas Baleares');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-RI', 'ES', 'La Rioja');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-MD', 'ES', 'Madrid');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-MC', 'ES', 'Murcia');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-NC', 'ES', 'Navarra');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-VC', 'ES', 'Valencia');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-CE', 'ES', 'Ceuta');");
+        $this->addSql("INSERT INTO location (iso_code, country_id, name) VALUES('ES-ML', 'ES', 'Melilla');");
 
         // Comunidades españolas en español
         $this->addSql("INSERT INTO location_language (location_id, language_id, name) (SELECT l.id, 'es', 'Andalucía' FROM location l WHERE l.iso_code ='ES-AN');");
@@ -78,6 +78,6 @@ final class Version20181007165737 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
-        $this->addSql("DELETE l FROM location l, location p WHERE l.parent_id = p.id AND p.iso_code ='ES';");
+        $this->addSql("DELETE FROM location WHERE parent_id IS NULL AND country_id ='ES';");
     }
 }
