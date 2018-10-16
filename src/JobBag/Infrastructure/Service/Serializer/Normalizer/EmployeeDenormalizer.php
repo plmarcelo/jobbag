@@ -134,8 +134,8 @@ class EmployeeDenormalizer implements SerializerAwareInterface, DenormalizerInte
 
         $languagesId = array_column($data['languages'], 'id');
         $languages = $this->languageRepository->findIn($languagesId);
-        foreach ($languages as $language) {
-            $person->addKnownLanguage($language);
+        foreach ($languages as $index => $language) {
+            $person->addKnownLanguage($language, $data['languages'][$index]['motherTongue']);
         }
 
         $user = $this->generateNewUser($data);
