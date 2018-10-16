@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Experience
  *
- * @ORM\Table(name="employee_experience")
+ * @ORM\Table(name="experience")
  * @ORM\Entity
  */
 class Experience
@@ -77,8 +77,17 @@ class Experience
     }
 
     /**
+     * @return null|int
+     * @Groups({"public"})
+     */
+    public function getProfessionId(): ?int
+    {
+        return $this->profession instanceof Profession ? $this->profession->getId() : null;
+    }
+
+    /**
      * @return int
-     * @Groups({"employee"})
+     * @Groups({"public"})
      */
     public function getYears(): int
     {
@@ -88,6 +97,7 @@ class Experience
     /**
      * @param int $years
      * @return Experience
+     * @Groups({"fillable"})
      */
     public function setYears($years): Experience
     {

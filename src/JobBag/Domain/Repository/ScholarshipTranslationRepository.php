@@ -7,8 +7,8 @@ use JobBag\Domain\Entity\ScholarshipTranslation;
 interface ScholarshipTranslationRepository
 {
     /**
-     * @param string|null $languageId
+     * @param string $languageId
      * @return ScholarshipTranslation[]
      */
-    public function findByLanguageId($languageId = null);
+    public function findByLanguageId($languageId): array;
 }

@@ -13,20 +13,28 @@ class FetchScholarshipsList
     private $scholarshipRepository;
 
     /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    /**
      * FetchScholarshipsList constructor.
      * @param ScholarshipTranslationRepository $scholarshipRepository
      */
-    public function __construct(ScholarshipTranslationRepository $scholarshipRepository)
+    public function __construct(ScholarshipTranslationRepository $scholarshipRepository, $defaultLocale)
     {
         $this->scholarshipRepository = $scholarshipRepository;
+        $this->defaultLocale = $defaultLocale;
     }
 
     /**
-     * @param string|null $language
+     * @param string|null $languageId
      * @return \JobBag\Domain\Entity\ScholarshipTranslation[]
      */
-    public function fetch($language = null)
+    public function fetch($languageId = null)
     {
-        return $this->scholarshipRepository->findByLanguageId($language);
+        $languageId = $languageId ?: $this->defaultLocale;
+
+        return $this->scholarshipRepository->findByLanguageId($languageId);
     }
 }

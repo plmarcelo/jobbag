@@ -21,13 +21,11 @@ class ORMScholarshipTranslationRepository extends ServiceEntityRepository implem
     }
 
     /**
-     * @param string|null $languageId
+     * @param string $languageId
      * @return ScholarshipTranslation[]
      */
-    public function findByLanguageId($languageId = null)
+    public function findByLanguageId($languageId): array
     {
-        $languageId = $languageId ?: 'en';
-
         return $this->findBy(
             ['language' => $languageId]
         );

@@ -2,7 +2,6 @@
 
 namespace JobBag\Domain\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -53,13 +52,6 @@ class Profession
     private $updatedAt;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Employee", mappedBy="profession")
-     */
-    private $employee;
-
-    /**
      * @var Profession
      *
      * @ORM\ManyToOne(targetEntity="Profession")
@@ -89,7 +81,6 @@ class Profession
      */
     public function __construct()
     {
-        $this->employee = new \Doctrine\Common\Collections\ArrayCollection();
         $this->language = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -155,34 +146,6 @@ class Profession
     }
 
     /**
-     * @return Collection|Employee[]
-     */
-    public function getEmployee(): Collection
-    {
-        return $this->employee;
-    }
-
-    public function addEmployee(Employee $employee): self
-    {
-        if (!$this->employee->contains($employee)) {
-            $this->employee[] = $employee;
-            $employee->addProfession($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEmployee(Employee $employee): self
-    {
-        if ($this->employee->contains($employee)) {
-            $this->employee->removeElement($employee);
-            $employee->removeProfession($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Language[]
      */
     public function getLanguage(): Collection
@@ -209,9 +172,9 @@ class Profession
     }
 
     /**
-     * @return Profession
+     * @return null|Profession
      */
-    public function getParent(): Profession
+    public function getParent(): ?Profession
     {
         return $this->parent;
     }

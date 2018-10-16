@@ -15,9 +15,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Location
 {
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="id", type="string", length=5, nullable=false)
+     * @ORM\Column(name="id", type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,17 +33,22 @@ class Location
     /**
      * @var string
      *
-     * @ORM\Column(name="iso_code", type="string", length=10, nullable=false)
+     * @ORM\Column(name="iso_code", type="string", length=10, nullable=true)
      */
     private $isoCode;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = 1;
 
     /**
      * @var Location
      *
      * @ORM\ManyToOne(targetEntity="Location")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
 
@@ -71,24 +76,40 @@ class Location
     }
 
     /**
-     * @return null|string
-     * @Groups({"employee"})
+     * @return null|int
+     * @Groups({"public"})
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
+     * @param int $id
+     * @return Location
+     * @Groups({"public"})
+     */
+    public function setId(int $id): Location
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * @return null|string
-     * @Groups({"employee"})
+     * @Groups({"public"})
      */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    /**
+     * @param string $name
+     * @return Location
+     */
+    public function setName(string $name): Location
     {
         $this->name = $name;
 
@@ -96,14 +117,18 @@ class Location
     }
 
     /**
-     * @return Location|null
+     * @return Location
      */
-    public function getParent(): ?Location
+    public function getParent(): Location
     {
         return $this->parent;
     }
 
-    public function setParent(?Location $parent): self
+    /**
+     * @param Location|null $parent
+     * @return Location
+     */
+    public function setParent(?Location $parent = null): Location
     {
         $this->parent = $parent;
 
@@ -118,7 +143,11 @@ class Location
         return $this->language;
     }
 
-    public function addLanguage(Language $language): self
+    /**
+     * @param Language $language
+     * @return Location
+     */
+    public function addLanguage(Language $language): Location
     {
         if (!$this->language->contains($language)) {
             $this->language[] = $language;
@@ -127,7 +156,11 @@ class Location
         return $this;
     }
 
-    public function removeLanguage(Language $language): self
+    /**
+     * @param Language $language
+     * @return Location
+     */
+    public function removeLanguage(Language $language): Location
     {
         if ($this->language->contains($language)) {
             $this->language->removeElement($language);
@@ -155,4 +188,22 @@ class Location
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     * @return Location
+     */
+    public function setActive(bool $active): Location
+    {
+        $this->active = $active;
+
+        return $this;
+    }
 }

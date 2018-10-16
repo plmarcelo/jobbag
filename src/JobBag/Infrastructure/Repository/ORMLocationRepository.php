@@ -4,26 +4,26 @@ namespace JobBag\Infrastructure\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use JobBag\Domain\Entity\Language;
-use JobBag\Domain\Repository\LanguageRepository;
+use JobBag\Domain\Entity\Location;
+use JobBag\Domain\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Language|null find($id, $lockMode = null, $lockVersion = null)
- * @method Language|null findOneBy(array $criteria, array $orderBy = null)
- * @method Language[]    findAll()
- * @method Language[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Location|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Location|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Location[]    findAll()
+ * @method Location[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ORMLanguageRepository extends ServiceEntityRepository implements LanguageRepository
+class ORMLocationRepository extends ServiceEntityRepository implements LocationRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Language::class);
+        parent::__construct($registry, Location::class);
     }
 
     /**
      * @param array $values
-     * @return ArrayCollection|Language[]
+     * @return ArrayCollection|Location[]
      */
     public function findIn(array $values = []): ArrayCollection
     {
@@ -31,6 +31,7 @@ class ORMLanguageRepository extends ServiceEntityRepository implements LanguageR
 
         $result = $queryBuilder->select()
             ->where($queryBuilder->expr()->in('l.id', $values))
+            ->andWhere($queryBuilder->expr()->eq('l.active', 1))
             ->getQuery()
             ->getResult();
 

@@ -36,3 +36,26 @@ services:
     JobBag\Application\Profession\FetchProfessionsList:
         arguments:
             $defaultLocale: '%default_locale%'
+
+    JobBag\Application\Scholarship\FetchScholarshipsList:
+        arguments:
+            $defaultLocale: '%default_locale%'
+
+    jobbag.denormalizer.employee:
+        class: 'JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeDenormalizer'
+        public: false
+        tags: [serializer.denormalizer]
+
+    jobbag.denormalizer.person:
+        class: 'JobBag\Infrastructure\Service\Serializer\Normalizer\PersonDenormalizer'
+        public: false
+        tags: [serializer.denormalizer]
+
+#    jobabg.serializer.default:
+#        class: 'Symfony\Component\Serializer\Serializer'
+#        arguments:
+#            0:
+#            - '@jobbag.denormalizer.employee'
+#            - '@serializer.denormalizer.object'
+#            1:
+#            - '@acme.encoder.json'

@@ -2,7 +2,6 @@
 
 namespace JobBag\Domain\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -48,7 +47,7 @@ class Language
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Person", mappedBy="language")
+     * @ORM\ManyToMany(targetEntity="Person", mappedBy="languages")
      */
     private $user;
 
@@ -127,7 +126,7 @@ class Language
     }
 
     /**
-     * @Groups("language")
+     * @Groups("public")
      * @return null|string
      */
     public function getId(): ?string
@@ -136,7 +135,7 @@ class Language
     }
 
     /**
-     * @Groups("language")
+     * @Groups("public")
      * @return null|string
      */
     public function getName(): ?string

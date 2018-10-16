@@ -70,6 +70,6 @@ class EmployeeController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json($employee, 200, [], ['groups' => ['employee']]);
+        return $this->json($employee, 200, [], ['groups' => ['public']]);
     }
 }

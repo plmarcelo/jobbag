@@ -57,7 +57,7 @@ class Scholarship
 
     /**
      * @return null|string
-     * @Groups({"employee"})
+     * @Groups({"public"})
      */
     public function getId(): ?string
     {

@@ -98,16 +98,27 @@ class User implements UserInterface, \Serializable
         $this->role = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     * @Groups({"public"})
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     * @return User
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -115,11 +126,19 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     * @Groups({"fillable"})
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -139,11 +158,6 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
-
     public function isActive(): ?bool
     {
         return $this->active;
@@ -157,11 +171,6 @@ class User implements UserInterface, \Serializable
     }
 
     public function isDeleted(): ?bool
-    {
-        return $this->deleted;
-    }
-
-    public function getDeleted(): ?bool
     {
         return $this->deleted;
     }
