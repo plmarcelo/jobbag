@@ -97,7 +97,7 @@ class EmployeeDenormalizer implements SerializerAwareInterface, DenormalizerInte
             $employee->addProfessionalExperience($profession, $experience['years']);
         }
 
-        $locations = $this->locationRepository->findIn($data['workingLocations']);
+        $locations = $this->locationRepository->findIn($data['workingLocationIds']);
         foreach ($locations as $location) {
             $employee->addWorkingLocation($location);
         }
@@ -132,10 +132,10 @@ class EmployeeDenormalizer implements SerializerAwareInterface, DenormalizerInte
         $person->setName($data['name']);
         $person->setAvatar($data['avatar']);
 
-        $languagesId = array_column($data['languages'], 'id');
-        $languages = $this->languageRepository->findIn($languagesId);
-        foreach ($languages as $index => $language) {
-            $person->addKnownLanguage($language, $data['languages'][$index]['motherTongue']);
+        $languagesData = array_column($data['languages'], 'motherTongue', 'id');
+        $languages = $this->languageRepository->findIn(array_keys($languagesData));
+        foreach ($languages as $language) {
+            $person->addKnownLanguage($language, $languagesData[$language->getId()]);
         }
 
         $user = $this->generateNewUser($data);

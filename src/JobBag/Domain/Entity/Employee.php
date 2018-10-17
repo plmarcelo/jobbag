@@ -247,11 +247,21 @@ class Employee
 
     /**
      * @return Collection|Location[]
-     * @Groups({"public"})
      */
     public function getWorkingLocations(): Collection
     {
         return $this->workingLocations;
+    }
+
+    /**
+     * @return Collection|int[]
+     * @Groups({"public"})
+     */
+    public function getWorkingLocationIds(): Collection
+    {
+        return $this->workingLocations->map(function ($workingLocation) {
+            return $workingLocation->getId();
+        });
     }
 
     /**
