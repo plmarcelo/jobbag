@@ -41,7 +41,7 @@ class Employee
     private $resume;
 
     /**
-     * @var Scholarship
+     * @var Scholarship|null
      *
      * @ORM\ManyToOne(targetEntity="Scholarship")
      * @ORM\JoinColumn(name="scholarship_id", referencedColumnName="id")
@@ -103,7 +103,7 @@ class Employee
      * @param null|string $resume
      * @return Employee
      */
-    public function setResume(?string $resume): self
+    public function setResume(?string $resume): Employee
     {
         $this->resume = $resume;
 
@@ -115,7 +115,7 @@ class Employee
         return $this->person;
     }
 
-    public function setPerson(?Person $person): self
+    public function setPerson(?Person $person): Employee
     {
         $this->person = $person;
 
@@ -143,7 +143,11 @@ class Employee
         return null;
     }
 
-    public function setScholarship(?Scholarship $scholarship): self
+    /**
+     * @param Scholarship|null $scholarship
+     * @return Employee
+     */
+    public function setScholarship(?Scholarship $scholarship): Employee
     {
         $this->scholarship = $scholarship;
 
