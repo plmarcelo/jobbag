@@ -41,15 +41,17 @@ services:
         arguments:
             $defaultLocale: '%default_locale%'
 
-    jobbag.denormalizer.employee:
-        class: 'JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeDenormalizer'
-        public: false
-        tags: [serializer.denormalizer]
-
-    jobbag.denormalizer.person:
-        class: 'JobBag\Infrastructure\Service\Serializer\Normalizer\PersonDenormalizer'
-        public: false
-        tags: [serializer.denormalizer]
+#    JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeDenormalizer:
+#        public: false
+#        tags: [serializer.denormalizer]
+#
+#    JobBag\Infrastructure\Service\Serializer\Normalizer\PersonDenormalizer:
+#        public: false
+#        tags: [serializer.denormalizer]
+#
+#    JobBag\Infrastructure\Service\Serializer\Normalizer\EntityNormalizer:
+#        public: false
+#        tags: [serializer.normalizer]
 
 #    jobabg.serializer.default:
 #        class: 'Symfony\Component\Serializer\Serializer'

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class PersonController
@@ -32,20 +33,15 @@ class PersonController extends AbstractController
     /**
      * @Route("", name="create_person", methods={"POST"})
      * @param Request $request
+     * @param SerializerInterface $serializer
      * @return mixed
      */
-    public function create(Request $request)
+    public function create(Request $request, SerializerInterface $serializer)
     {
+
+        $person = $serializer->deserialize($request->getContent(), Person::class, 'json');
+
         $entityManager = $this->getDoctrine()->getManager();
-
-        $data = $request->getContent();
-
-        /**
-         * @var Serializer $serializer
-         */
-        $serializer = $this->get('serializer');
-        $person = $serializer->deserialize($data, Person::class, 'json');
-
         $entityManager->persist($person);
 
         $entityManager->flush();

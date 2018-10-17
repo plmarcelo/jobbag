@@ -167,7 +167,19 @@ class Person
     }
 
     /**
+     * @param Collection|PersonLanguage[] $languages
+     * @return Person
+     */
+    public function setLanguages(Collection $languages): Person
+    {
+        $this->languages = $languages;
+
+        return $this;
+    }
+
+    /**
      * @return Collection|PersonLanguage[]
+     * @Groups({"public"})
      */
     public function getLanguages(): Collection
     {

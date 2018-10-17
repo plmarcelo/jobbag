@@ -2,11 +2,9 @@
 
 namespace JobBag\Infrastructure\Service\Serializer\Normalizer;
 
-use Doctrine\Common\Collections\Criteria;
 use JobBag\Domain\Entity\Person;
 use JobBag\Domain\Entity\User;
 use JobBag\Domain\Repository\LanguageRepository;
-use JobBag\Domain\Repository\LocationRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\BadMethodCallException;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
@@ -18,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class PersonDenormalizer implements SerializerAwareInterface, DenormalizerInterface
+class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterface
 {
     use SerializerAwareTrait;
 
@@ -28,10 +26,6 @@ class PersonDenormalizer implements SerializerAwareInterface, DenormalizerInterf
     private $passwordEncoder;
 
     /**
-     * @var LocationRepository
-     */
-    private $locationRepository;
-    /**
      * @var LanguageRepository
      */
     private $languageRepository;
@@ -39,16 +33,13 @@ class PersonDenormalizer implements SerializerAwareInterface, DenormalizerInterf
     /**
      * EmployeeDenormalizer constructor.
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param LocationRepository $locationRepository
      * @param LanguageRepository $languageRepository
      */
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
-        LocationRepository $locationRepository,
         LanguageRepository $languageRepository
     ) {
         $this->passwordEncoder = $passwordEncoder;
-        $this->locationRepository = $locationRepository;
         $this->languageRepository = $languageRepository;
     }
 
@@ -71,17 +62,16 @@ class PersonDenormalizer implements SerializerAwareInterface, DenormalizerInterf
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $location = $this->locationRepository->find($data['locationId']);
-
         $person = new Person();
         $person->setName($data['name']);
         $person->setAvatar($data['avatar']);
-        $person->setLocation($location);
-        $person->setBirthdateFromString($data['birthdate']);
-        $languages = $this->languageRepository->findIn($data['languages']);
+
+        $languagesData = array_column($data['languages'], 'motherTongue', 'id');
+        $languages = $this->languageRepository->findIn(array_keys($languagesData));
         foreach ($languages as $language) {
-            $person->addLanguage($language);
+            $person->addKnownLanguage($language, $languagesData[$language->getId()]);
         }
+
         $user = $this->generateNewUser($data);
         $person->setUser($user);
 
@@ -108,7 +98,6 @@ class PersonDenormalizer implements SerializerAwareInterface, DenormalizerInterf
      */
     private function generateNewUser($data): User
     {
-
         $user = new User();
         $user->setUsername($data['email']);
 
