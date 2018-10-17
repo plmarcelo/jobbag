@@ -48,26 +48,18 @@ class EmployeeController extends AbstractController
     }
 
 
-
     /**
      * @Route("", name="create_employee", methods={"POST"})
      * @param Request $request
+     * @param SerializerInterface $serializer
      * @return mixed
      */
-    public function create(Request $request)
+    public function create(Request $request, SerializerInterface $serializer)
     {
+        $employee = $serializer->deserialize($request->getContent(), Employee::class, 'json');
+
         $entityManager = $this->getDoctrine()->getManager();
-
-        $data = $request->getContent();
-
-        /**
-         * @var Serializer $serializer
-         */
-        $serializer = $this->get('serializer');
-        $employee = $serializer->deserialize($data, Employee::class, 'json');
-
         $entityManager->persist($employee);
-
         $entityManager->flush();
 
         return $this->json($employee, 200, [], ['groups' => ['public']]);

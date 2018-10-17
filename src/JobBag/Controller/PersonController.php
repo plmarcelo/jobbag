@@ -38,12 +38,10 @@ class PersonController extends AbstractController
      */
     public function create(Request $request, SerializerInterface $serializer)
     {
-
         $person = $serializer->deserialize($request->getContent(), Person::class, 'json');
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($person);
-
         $entityManager->flush();
 
         return $this->json($person, 200, [], ['groups' => ['public']]);
