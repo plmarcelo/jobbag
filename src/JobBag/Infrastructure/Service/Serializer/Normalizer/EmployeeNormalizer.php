@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use JobBag\Domain\Entity\Employee;
 use JobBag\Domain\Entity\Person;
 use JobBag\Domain\Entity\Profession;
-use JobBag\Domain\Entity\Scholarship;
 use JobBag\Domain\Entity\User;
 use JobBag\Domain\Repository\LanguageRepository;
 use JobBag\Domain\Repository\LocationRepository;
@@ -84,9 +83,6 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
 
         $employee = new Employee();
         $employee->setResume($data['resume']);
-
-        $scholarship = $this->entityManager->getRepository(Scholarship::class)->find($data['scholarshipId']);
-        $employee->setScholarship($scholarship);
 
         foreach ($data['experience'] as $experience) {
             $profession = $this->entityManager->getRepository(Profession::class)->find($experience['professionId']);
