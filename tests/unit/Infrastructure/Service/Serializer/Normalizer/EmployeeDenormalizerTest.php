@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JobBag\Domain\Entity\Employee;
 use JobBag\Domain\Entity\Scholarship;
-use JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeDenormalizer;
+use JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeNormalizer;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -48,7 +48,7 @@ class EmployeeDenormalizerTest extends \PHPUnit_Framework_TestCase
     private $entityManagerMock;
 
     /**
-     * @var EmployeeDenormalizer
+     * @var EmployeeNormalizer
      */
     private $denormalizer;
 
@@ -69,7 +69,7 @@ class EmployeeDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->scholarshipRepositoryMock = $this->mockScholarshipRepository();
         $this->scholarshipMock = $this->mockScholarshipEntity();
 
-        $this->denormalizer = new EmployeeDenormalizer(
+        $this->denormalizer = new EmployeeNormalizer(
             $this->passwordEncoderMock,
             $this->entityManagerMock
         );
@@ -81,7 +81,7 @@ class EmployeeDenormalizerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers       \JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeDenormalizer::denormalize
+     * @covers       \JobBag\Infrastructure\Service\Serializer\Normalizer\EmployeeNormalizer::denormalize
      * @dataProvider provideEmployeeData
      * @param array $employeeData
      */

@@ -4,9 +4,6 @@ namespace JobBag\Infrastructure\Service\Serializer\Normalizer;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JobBag\Domain\Entity\Employee;
-use JobBag\Domain\Entity\Experience;
-use JobBag\Domain\Entity\Language;
-use JobBag\Domain\Entity\Location;
 use JobBag\Domain\Entity\Person;
 use JobBag\Domain\Entity\Profession;
 use JobBag\Domain\Entity\Scholarship;
@@ -24,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class EmployeeDenormalizer implements SerializerAwareInterface, DenormalizerInterface
+class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterface
 {
     use SerializerAwareTrait;
 
@@ -150,7 +147,6 @@ class EmployeeDenormalizer implements SerializerAwareInterface, DenormalizerInte
      */
     private function generateNewUser($data): User
     {
-
         $user = new User();
         $user->setUsername($data['email']);
 
