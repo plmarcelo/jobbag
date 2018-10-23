@@ -1,15 +1,12 @@
 <?php
 
-namespace JobBag\Controller;
+namespace JobBag\Controller\Prv;
 
-use JobBag\Application\Employee\SearchByProfessionAndState;
-use JobBag\Domain\Entity\Employee;
+use JobBag\Application\Employee\SearchByProfessionAndLocation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class EmployeeController
@@ -19,21 +16,21 @@ use Symfony\Component\Serializer\SerializerInterface;
 class EmployeeController extends AbstractController
 {
     /**
-     * @var SearchByProfessionAndState
+     * @var SearchByProfessionAndLocation
      */
     private $employeSearcher;
 
     /**
      * EmployeeController constructor.
-     * @param SearchByProfessionAndState $employeSearcher
+     * @param SearchByProfessionAndLocation $employeSearcher
      */
-    public function __construct(SearchByProfessionAndState $employeSearcher)
+    public function __construct(SearchByProfessionAndLocation $employeSearcher)
     {
         $this->employeSearcher = $employeSearcher;
     }
 
     /**
-     * @Route("/", name="search_employee", methods={"GET"})
+     * @Route("", name="search_employee", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -45,23 +42,5 @@ class EmployeeController extends AbstractController
         $employees = $this->employeSearcher->search($locationId, $professionId);
 
         return $this->json($employees, 200, [], ['groups' => ['employee']]);
-    }
-
-
-    /**
-     * @Route("", name="create_employee", methods={"POST"})
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @return mixed
-     */
-    public function create(Request $request, SerializerInterface $serializer)
-    {
-        $employee = $serializer->deserialize($request->getContent(), Employee::class, 'json');
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($employee);
-        $entityManager->flush();
-
-        return $this->json($employee, 200, [], ['groups' => ['public']]);
     }
 }
