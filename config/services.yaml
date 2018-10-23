@@ -29,6 +29,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    JobBag\Application\Employee\SearchByProfessionAndLocation:
+        arguments:
+            $defaultLocale: '%default_locale%'
+
     JobBag\Application\Location\FetchLocationsList:
         arguments:
             $defaultLocale: '%default_locale%'

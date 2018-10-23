@@ -11,6 +11,7 @@ class FetchLocationsList
      * @var LocationTranslationRepository
      */
     private $locationRepository;
+
     /**
      * @var string
      */

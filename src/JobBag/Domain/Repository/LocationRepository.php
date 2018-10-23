@@ -18,4 +18,11 @@ interface LocationRepository
      * @return ArrayCollection|Location[]
      */
     public function findIn(array $values = []): ArrayCollection;
+
+    /**
+     * @param int $locationId
+     * @param bool $onlyActives
+     * @return ArrayCollection
+     */
+    public function findRelatives(int $locationId, bool $onlyActives = true): ArrayCollection;
 }

@@ -22,21 +22,21 @@ class ORMEmployeeRepository extends ServiceEntityRepository implements EmployeeR
     }
 
     /**
-     * @param string $provinceId
+     * @param string $locationId
      * @param int $professionId
      * @param string|null $languageId
      * @return ArrayCollection<Employee>
      */
-    public function findByProvinceIdAndProfessionId($provinceId, $professionId, $languageId = null)
+    public function findByLocationIdAndProfessionId($locationId, $professionId, $languageId): ArrayCollection
     {
         $qb = $this->createQueryBuilder('e');
 
         $result = $qb->select('DISTINCT e')
             ->join('e.person', 'p', 'WITH', 'p = e.person')
             ->join('e.experience', 'ex', 'WITH', 'ex.employee = e')
-            ->where('p.province = :provinceId')
+            ->where(':locationId IN (e.workingLocations)')
             ->andWhere('ex.profession = :professionId')
-            ->setParameter('provinceId', $provinceId)
+            ->setParameter('locationId', $locationId)
             ->setParameter('professionId', $professionId)
             ->orderBy('e.person', 'ASC')
             ->setMaxResults(10)

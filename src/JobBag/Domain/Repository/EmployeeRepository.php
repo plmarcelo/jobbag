@@ -8,15 +8,15 @@ use JobBag\Domain\Entity\Employee;
 interface EmployeeRepository
 {
     /**
-     * @return Employee[]
+     * @return ArrayCollection | Employee[]
      */
     public function findAll();
 
     /**
-     * @param string $provinceId
+     * @param string $locationId
      * @param int $professionId
      * @param string|null $language
-     * @return ArrayCollection<Employee>
+     * @return ArrayCollection | Employee[]
      */
-    public function findByProvinceIdAndProfessionId($provinceId, $professionId, $language = null);
+    public function findByLocationIdAndProfessionId($locationId, $professionId, $language);
 }
