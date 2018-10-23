@@ -24,10 +24,10 @@ class EmployeeController extends AbstractController
      * EmployeeController constructor.
      * @param SearchByProfessionAndLocation $employeSearcher
      */
-    public function __construct(SearchByProfessionAndLocation $employeSearcher)
-    {
-        $this->employeSearcher = $employeSearcher;
-    }
+//    public function __construct(SearchByProfessionAndLocation $employeSearcher)
+//    {
+//        $this->employeSearcher = $employeSearcher;
+//    }
 
     /**
      * @Route("", name="search_employee", methods={"GET"})
