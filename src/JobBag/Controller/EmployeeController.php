@@ -19,6 +19,19 @@ use Symfony\Component\Serializer\SerializerInterface;
 class EmployeeController extends AbstractController
 {
     /**
+     * @Route("", name="list_employees", methods={"GET"})
+     * @return mixed
+     */
+    public function list()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $person = $entityManager->getRepository(Employee::class)->findAll();
+
+        return $this->json($person, 200, [], ['groups' => ['public']]);
+    }
+
+    /**
      * @Route("/{id}", name="show_employee", methods={"GET"})
      * @param int $id
      * @return mixed
@@ -31,6 +44,7 @@ class EmployeeController extends AbstractController
 
         return $this->json($person, 200, [], ['groups' => ['public']]);
     }
+
     /**
      * @Route("", name="create_employee", methods={"POST"})
      * @param Request $request
