@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Employee
  *
  * @ORM\Table(name="employee", indexes={@ORM\Index(name="idx_employee_scholarship_id", columns={"scholarship_id"})})
- * @ORM\Entity(repositoryClass="JobBag\Domain\Repository\EmployeeRepository")
+ * @ORM\Entity(repositoryClass="JobBag\Infrastructure\Repository\ORMEmployeeRepository")
  */
 class Employee
 {

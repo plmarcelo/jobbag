@@ -2,7 +2,7 @@
 
 namespace JobBag\Controller;
 
-use JobBag\Application\Employee\SearchByProfessionAndState;
+use JobBag\Application\Employee\SearchByProfessionAndLocation;
 use JobBag\Domain\Entity\Employee;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,35 +19,18 @@ use Symfony\Component\Serializer\SerializerInterface;
 class EmployeeController extends AbstractController
 {
     /**
-     * @var SearchByProfessionAndState
+     * @Route("/{id}", name="show_employee", methods={"GET"})
+     * @param int $id
+     * @return mixed
      */
-    private $employeSearcher;
-
-    /**
-     * EmployeeController constructor.
-     * @param SearchByProfessionAndState $employeSearcher
-     */
-    public function __construct(SearchByProfessionAndState $employeSearcher)
+    public function show(int $id)
     {
-        $this->employeSearcher = $employeSearcher;
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $person = $entityManager->getRepository(Employee::class)->find($id);
+
+        return $this->json($person, 200, [], ['groups' => ['public']]);
     }
-
-    /**
-     * @Route("/", name="search_employee", methods={"GET"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function search(Request $request)
-    {
-        $provinceId = $request->get('province_id');
-        $professionId = $request->get('profession_id');
-
-        $employees = $this->employeSearcher->search($provinceId, $professionId);
-
-        return $this->json($employees, 200, [], ['groups' => ['employee']]);
-    }
-
-
     /**
      * @Route("", name="create_employee", methods={"POST"})
      * @param Request $request
