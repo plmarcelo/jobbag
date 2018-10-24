@@ -16,11 +16,12 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterface
+class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
     use SerializerAwareTrait;
 
@@ -150,5 +151,13 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
         $user->setPassword($password);
 
         return $user;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCacheableSupportsMethod(): bool
+    {
+        return true;
     }
 }
