@@ -25,6 +25,20 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
 {
     use SerializerAwareTrait;
 
+    private static $defaultValues = [
+        'avatar' => '',
+        'resume' => ''
+    ];
+
+    private static $requiredAttributes = [
+        'name'               => 'Person name',
+        'languages'          => 'Languages',
+        'workingLocationIds' => 'Working area',
+        'experience'         => 'Experince',
+        'email'              => 'Email',
+        'password'           => 'Password'
+    ];
+
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -81,6 +95,8 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $data = $this->setDefaults($data);
+        $this->validateAttributes($data);
 
         $employee = new Employee();
         $employee->setResume($data['resume']);
@@ -159,5 +175,32 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
     public function hasCacheableSupportsMethod(): bool
     {
         return true;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function setDefaults(array $data): array
+    {
+        return array_merge(self::$defaultValues, $data);
+    }
+
+    /**
+     * @param array $data
+     */
+    private function validateAttributes(array $data): void
+    {
+        foreach (self::$requiredAttributes as $name => $label) {
+            if (!array_key_exists($name, $data)) {
+                throw new InvalidArgumentException($label . ' is required.');
+            }
+        }
+
+        if (\count($data['languages']) === 0) {
+            throw new InvalidArgumentException(
+                sprintf('At least a %s should be specified.', self::$requiredAttributes['languages'])
+            );
+        }
     }
 }

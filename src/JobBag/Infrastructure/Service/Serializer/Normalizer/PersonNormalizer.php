@@ -5,6 +5,7 @@ namespace JobBag\Infrastructure\Service\Serializer\Normalizer;
 use JobBag\Domain\Entity\Person;
 use JobBag\Domain\Entity\User;
 use JobBag\Domain\Repository\LanguageRepository;
+use JobBag\Domain\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\BadMethodCallException;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
@@ -21,10 +22,16 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
 {
     use SerializerAwareTrait;
 
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
+    private static $defaultValues = [
+        'avatar' => ''
+    ];
+
+    private static $requiredAttributes = [
+        'name'      => 'Person name',
+        'languages' => 'Languages',
+        'email'     => 'Email',
+        'password'  => 'Password'
+    ];
 
     /**
      * @var LanguageRepository
@@ -32,16 +39,21 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
     private $languageRepository;
 
     /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+
+    /**
      * EmployeeDenormalizer constructor.
-     * @param UserPasswordEncoderInterface $passwordEncoder
      * @param LanguageRepository $languageRepository
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(
-        UserPasswordEncoderInterface $passwordEncoder,
-        LanguageRepository $languageRepository
+        LanguageRepository $languageRepository,
+        UserPasswordEncoderInterface $passwordEncoder
     ) {
-        $this->passwordEncoder = $passwordEncoder;
         $this->languageRepository = $languageRepository;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -52,7 +64,7 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      * @param string $format Format the given data was extracted from
      * @param array $context Options available to the denormalizer
      *
-     * @return object
+     * @return object | Person
      *
      * @throws BadMethodCallException   Occurs when the normalizer is not called in an expected context
      * @throws InvalidArgumentException Occurs when the arguments are not coherent or not supported
@@ -63,6 +75,9 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $data = $this->setDefaults($data);
+        $this->validateAttributes($data);
+
         $person = new Person();
         $person->setName($data['name']);
         $person->setAvatar($data['avatar']);
@@ -73,8 +88,7 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
             $person->addKnownLanguage($language, $languagesData[$language->getId()]);
         }
 
-        $user = $this->generateNewUser($data);
-        $person->setUser($user);
+        $person->setUser($this->denormalizeUser($data));
 
         return $person;
     }
@@ -88,24 +102,9 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      *
      * @return bool
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
         return $type === Person::class;
-    }
-
-    /**
-     * @param mixed $data Data to restore
-     * @return User
-     */
-    private function generateNewUser($data): User
-    {
-        $user = new User();
-        $user->setUsername($data['email']);
-
-        $password = $this->passwordEncoder->encodePassword($user, $data['password']);
-        $user->setPassword($password);
-
-        return $user;
     }
 
     /**
@@ -114,5 +113,47 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
     public function hasCacheableSupportsMethod(): bool
     {
         return true;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function setDefaults(array $data): array
+    {
+        return array_merge(self::$defaultValues, $data);
+    }
+
+    /**
+     * @param array $data
+     */
+    private function validateAttributes(array $data): void
+    {
+        foreach (self::$requiredAttributes as $name => $label) {
+            if (!array_key_exists($name, $data)) {
+                throw new InvalidArgumentException($label . ' is required.');
+            }
+        }
+
+        if (\count($data['languages']) === 0) {
+            throw new InvalidArgumentException(
+                sprintf('At least a %s should be specified.', self::$requiredAttributes['languages'])
+            );
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return User
+     */
+    private function denormalizeUser(array $data): User
+    {
+        $user = new User();
+        $user->setUsername($data['email']);
+
+        $password = $this->passwordEncoder->encodePassword($user, $data['password']);
+        $user->setPassword($password);
+
+        return $user;
     }
 }
