@@ -62,6 +62,16 @@ class Profession
     private $parent;
 
     /**
+     * @var Country
+     *
+     * @ORM\ManyToOne(targetEntity="Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * })
+     */
+    private $country;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Language", inversedBy="profession")
@@ -186,6 +196,25 @@ class Profession
     public function setParent(Profession $parent): Profession
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return null|Country
+     */
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     * @return Profession
+     */
+    public function setCountry(Country $country): Profession
+    {
+        $this->country = $country;
 
         return $this;
     }

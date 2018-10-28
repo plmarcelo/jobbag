@@ -2,9 +2,8 @@
 
 namespace JobBag\Application\Profession;
 
-use JobBag\Domain\Entity\Profession;
+use Doctrine\Common\Collections\ArrayCollection;
 use JobBag\Domain\Entity\ProfessionTranslation;
-use JobBag\Domain\Repository\ProfessionRepository;
 use JobBag\Domain\Repository\ProfessionTranslationRepository;
 
 class FetchProfessionsList
@@ -31,17 +30,38 @@ class FetchProfessionsList
     }
 
     /**
+     * @param int $id
      * @param string|null $languageId
-     * @return ProfessionTranslation[]
+     * @return ProfessionTranslation
      */
-    public function fetch($languageId = null, $id = null)
+    public function fetch(int $id, string $languageId = null): ProfessionTranslation
     {
         $languageId = $languageId ?: $this->defaultLocale;
 
-        if ($id === null) {
-            return $this->professionRepository->findRoots($languageId);
-        }
+        return $this->professionRepository->findById($id, $languageId);
+    }
 
-        return $this->professionRepository->findByParentId($languageId, $id);
+    /**
+     * @param int $countryId
+     * @param string|null $languageId
+     * @return ArrayCollection|ProfessionTranslation[]
+     */
+    public function fetchByCountryId(int $countryId, string $languageId = null): ArrayCollection
+    {
+        $languageId = $languageId ?: $this->defaultLocale;
+
+        return $this->professionRepository->findByCountryId($countryId, $languageId);
+    }
+
+    /**
+     * @param int $parentId
+     * @param string|null $languageId
+     * @return ArrayCollection|ProfessionTranslation[]
+     */
+    public function fetchByParentId(int $parentId, string $languageId = null)
+    {
+        $languageId = $languageId ?: $this->defaultLocale;
+
+        return $this->professionRepository->findByParentId($parentId, $languageId);
     }
 }
