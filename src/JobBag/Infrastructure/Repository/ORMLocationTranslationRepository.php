@@ -4,6 +4,8 @@ namespace JobBag\Infrastructure\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use JobBag\Domain\Entity\LocationTranslation;
 use JobBag\Domain\Repository\LocationTranslationRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -22,11 +24,33 @@ class ORMLocationTranslationRepository extends ServiceEntityRepository implement
     }
 
     /**
+     * @param int $id
      * @param string $languageId
-     * @param int $parentId
-     * @return LocationTranslation[]
+     * @return LocationTranslation
      */
-    public function findByParentId($languageId, $parentId)
+    public function findById(int $id, string $languageId): LocationTranslation
+    {
+        try {
+            return $this->createQueryBuilder('ll')
+                ->select('DISTINCT ll')
+                ->where('ll.language = :languageId')
+                ->andWhere('ll.location = :id')
+                ->setParameter('languageId', $languageId)
+                ->setParameter('id', $id)
+                ->orderBy('ll.name', 'ASC')
+                ->getQuery()
+                ->getSingleResult();
+        } catch (NoResultException $e) {
+        } catch (NonUniqueResultException $e) {
+        }
+    }
+
+    /**
+     * @param int $parentId
+     * @param string $languageId
+     * @return ArrayCollection|LocationTranslation[]
+     */
+    public function findByParentId($parentId, $languageId)
     {
         $result = $this->createQueryBuilder('ll')
             ->select('DISTINCT ll')
@@ -44,7 +68,7 @@ class ORMLocationTranslationRepository extends ServiceEntityRepository implement
 
     /**
      * @param string $languageId
-     * @return LocationTranslation[]
+     * @return ArrayCollection|LocationTranslation[]
      */
     public function findRoots($languageId)
     {

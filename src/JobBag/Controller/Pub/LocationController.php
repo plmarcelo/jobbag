@@ -4,6 +4,8 @@ namespace JobBag\Controller\Pub;
 
 use JobBag\Application\Location\FetchLocationsList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,14 +30,27 @@ class LocationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="location_list", methods={"GET"})
-     * @param string $_locale
-     * @param int|null $id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @Route("", name="list_locations", methods={"GET"})
+     * @param Request $request
+     * @param string|null $_locale
+     * @return JsonResponse
      */
-    public function index($_locale, $id = null)
+    public function list(Request $request, $_locale = null): JsonResponse
     {
-        $locations = $this->locationsFetcher->fetch($_locale, $id);
+        $locations = $this->locationsFetcher->fetchByParentId($request->query->get('parentId', null), $_locale);
+
+        return $this->json($locations, 200, [], ['groups' => ['location']]);
+    }
+
+    /**
+     * @Route("/{id}", name="show_location", methods={"GET"})
+     * @param int|null $id
+     * @param string|null $_locale
+     * @return JsonResponse
+     */
+    public function index($id = null, $_locale = null): JsonResponse
+    {
+        $locations = $this->locationsFetcher->fetch($id, $_locale);
 
         return $this->json($locations, 200, [], ['groups' => ['location']]);
     }

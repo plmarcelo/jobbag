@@ -2,6 +2,7 @@
 
 namespace JobBag\Application\Location;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use JobBag\Domain\Entity\LocationTranslation;
 use JobBag\Domain\Repository\LocationTranslationRepository;
 
@@ -29,18 +30,30 @@ class FetchLocationsList
     }
 
     /**
+     * @param int $id
      * @param null|string $languageId
-     * @param null|int $id
-     * @return LocationTranslation[]
+     * @return LocationTranslation
      */
-    public function fetch($languageId = null, $id = null)
+    public function fetch(int $id, string $languageId = null): LocationTranslation
     {
         $languageId = $languageId ?: $this->defaultLocale;
 
-        if ($id === null) {
+        return $this->locationRepository->findById($id, $languageId);
+    }
+
+    /**
+     * @param int $parentId
+     * @param string|null $languageId
+     * @return ArrayCollection|LocationTranslation[]
+     */
+    public function fetchByParentId($parentId, string $languageId = null)
+    {
+        $languageId = $languageId ?: $this->defaultLocale;
+
+        if ($parentId === null) {
             return $this->locationRepository->findRoots($languageId);
         }
 
-        return $this->locationRepository->findByParentId($languageId, $id);
+        return $this->locationRepository->findByParentId($parentId, $languageId);
     }
 }
