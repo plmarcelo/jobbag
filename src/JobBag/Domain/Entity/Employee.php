@@ -11,7 +11,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Employee
  *
- * @ORM\Table(name="employee", indexes={@ORM\Index(name="idx_employee_scholarship_id", columns={"scholarship_id"})})
+ * @ORM\Table(
+ *     name="employee",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="uk_person", columns={"person_id"})},
+ *     indexes={@ORM\Index(name="idx_employee_scholarship_id", columns={"scholarship_id"})}
+ *     )
  * @ORM\Entity(repositoryClass="JobBag\Infrastructure\Repository\ORMEmployeeRepository")
  */
 class Employee
@@ -32,6 +36,13 @@ class Employee
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rate", type="decimal", precision=3, scale=1, nullable=false, options={"default"="0"})
+     */
+    private $rate = '0';
 
     /**
      * @var string|null
@@ -62,7 +73,7 @@ class Employee
     private $experience;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Location")
      * @ORM\JoinTable(name="working_location",
@@ -110,14 +121,41 @@ class Employee
         return $this;
     }
 
+    /**
+     * @return Person|null
+     */
     public function getPerson(): ?Person
     {
         return $this->person;
     }
 
+    /**
+     * @param Person|null $person
+     * @return Employee
+     */
     public function setPerson(?Person $person): Employee
     {
         $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     * @Groups({"public"})
+     */
+    public function getRate(): float
+    {
+        return $this->rate;
+    }
+
+    /**
+     * @param $rate
+     * @return Employee
+     */
+    public function setRate($rate): Employee
+    {
+        $this->rate = $rate;
 
         return $this;
     }
@@ -152,46 +190,6 @@ class Employee
         $this->scholarship = $scholarship;
 
         return $this;
-    }
-
-    /**
-     * Person entity properties
-     */
-
-    /**
-     * @return string
-     * @Groups({"public"})
-     */
-    public function getName(): string
-    {
-        return $this->person instanceof Person ? $this->person->getName() : '';
-    }
-
-    /**
-     * @return string
-     * @Groups({"public"})
-     */
-    public function getEmail(): string
-    {
-        return $this->person instanceof Person ? $this->person->getEmail() : '';
-    }
-
-    /**
-     * @return string
-     * @Groups({"public"})
-     */
-    public function getAvatar(): string
-    {
-        return $this->person instanceof Person ? $this->person->getAvatar() : '';
-    }
-
-    /**
-     * @return float
-     * @Groups({"public"})
-     */
-    public function getRate(): float
-    {
-        return $this->person instanceof Person ? $this->person->getRate() : 0;
     }
 
     /**
@@ -263,7 +261,7 @@ class Employee
      */
     public function getWorkingLocationIds(): Collection
     {
-        return $this->workingLocations->map(function ($workingLocation) {
+        return $this->workingLocations->map(function (Location $workingLocation) {
             return $workingLocation->getId();
         });
     }
@@ -301,5 +299,36 @@ class Employee
     public function getLanguages(): Collection
     {
         return $this->person instanceof Person ? $this->person->getLanguages() : [];
+    }
+
+    /**
+     * Person entity properties
+     */
+
+    /**
+     * @return string
+     * @Groups({"public"})
+     */
+    public function getName(): string
+    {
+        return $this->person instanceof Person ? $this->person->getName() : '';
+    }
+
+    /**
+     * @return string
+     * @Groups({"public"})
+     */
+    public function getEmail(): string
+    {
+        return $this->person instanceof Person ? $this->person->getEmail() : '';
+    }
+
+    /**
+     * @return string
+     * @Groups({"public"})
+     */
+    public function getAvatar(): string
+    {
+        return $this->person instanceof Person ? $this->person->getAvatar() : '';
     }
 }

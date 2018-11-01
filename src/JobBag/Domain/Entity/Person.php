@@ -2,6 +2,7 @@
 
 namespace JobBag\Domain\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -31,20 +32,6 @@ class Person
     private $name;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="avatar", type="string", length=100, nullable=true)
-     */
-    private $avatar;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="rate", type="decimal", precision=3, scale=1, nullable=false, options={"default"="0"})
-     */
-    private $rate = '0';
-
-    /**
      * @var User
      *
      * @ORM\OneToOne(targetEntity="User", cascade={"persist", "remove"})
@@ -53,7 +40,7 @@ class Person
     private $user;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\OneToMany(
      *     targetEntity="PersonLanguage",
@@ -70,7 +57,7 @@ class Person
      */
     public function __construct()
     {
-        $this->languages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->languages = new ArrayCollection();
     }
 
     /**
@@ -83,66 +70,21 @@ class Person
     }
 
     /**
-     * @return null|string
+     * @return string
      * @Groups({"public"})
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Person
+     */
     public function setName(string $name): Person
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     * @Groups({"public"})
-     */
-    public function getEmail(): ?string
-    {
-        return $this->user->getUsername();
-    }
-
-    /**
-     * @return null|string
-     * @Groups({"public"})
-     */
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    /**
-     * @param null|string $avatar
-     * @return Person
-     */
-    public function setAvatar(?string $avatar): Person
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     * @Groups({"public"})
-     */
-    public function getRate(): float
-    {
-        return $this->rate;
-    }
-
-    /**
-     * @param $rate
-     * @return Person
-     */
-    public function setRate($rate): Person
-    {
-        $this->rate = $rate;
 
         return $this;
     }
@@ -225,5 +167,23 @@ class Person
         $knownLanguage->setMotherTongue($default);
 
         return $this->addLanguage($knownLanguage);
+    }
+
+    /**
+     * @return null|string
+     * @Groups({"public"})
+     */
+    public function getEmail(): ?string
+    {
+        return $this->user->getUsername();
+    }
+
+    /**
+     * @return null|string
+     * @Groups({"public"})
+     */
+    public function getAvatar(): ?string
+    {
+        return $this->user->getAvatar();
     }
 }

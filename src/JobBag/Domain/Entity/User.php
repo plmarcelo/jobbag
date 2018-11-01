@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * User
  *
- * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="username_UNIQUE", columns={"username"})})
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="uk_username", columns={"username"})})
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
@@ -39,6 +39,13 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="password", type="string", length=60, nullable=false)
      */
     private $password;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="avatar", type="string", length=100, nullable=true)
+     */
+    private $avatar;
 
     /**
      * @var \DateTime|null
@@ -146,6 +153,26 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     * @Groups({"public"})
+     */
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param null|string $avatar
+     * @return User
+     */
+    public function setAvatar(?string $avatar): User
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
     public function getLastLogin(): ?\DateTimeInterface
     {
         return $this->lastLogin;
@@ -214,6 +241,10 @@ class User implements UserInterface, \Serializable
         return $this->role;
     }
 
+    /**
+     * @param Role $role
+     * @return User
+     */
     public function addRole(Role $role): self
     {
         if (!$this->role->contains($role)) {
@@ -223,6 +254,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @param Role $role
+     * @return User
+     */
     public function removeRole(Role $role): self
     {
         if ($this->role->contains($role)) {
