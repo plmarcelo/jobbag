@@ -30,21 +30,21 @@ class Role
      */
     private $name;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="role")
-     */
-    private $user;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+//    /**
+//     * @var \Doctrine\Common\Collections\Collection
+//     *
+//     * @ORM\ManyToMany(targetEntity="User", mappedBy="role")
+//     */
+//    private $user;
+//
+//    /**
+//     * Constructor
+//     */
+//    public function __construct()
+//    {
+//        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+//    }
+//
     public function getId(): ?string
     {
         return $this->id;
@@ -61,33 +61,33 @@ class Role
 
         return $this;
     }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
-            $user->addRole($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->user->contains($user)) {
-            $this->user->removeElement($user);
-            $user->removeRole($this);
-        }
-
-        return $this;
-    }
-
+//
+//    /**
+//     * @return Collection|User[]
+//     */
+//    public function getUser(): Collection
+//    {
+//        return $this->user;
+//    }
+//
+//    public function addUser(User $user): self
+//    {
+//        if (!$this->user->contains($user)) {
+//            $this->user[] = $user;
+//            $user->addRole($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeUser(User $user): self
+//    {
+//        if ($this->user->contains($user)) {
+//            $this->user->removeElement($user);
+//            $user->removeRole($this);
+//        }
+//
+//        return $this;
+//    }
+//
 }

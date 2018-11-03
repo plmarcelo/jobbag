@@ -17,7 +17,7 @@ class Experience
      * @var Employee
      *
      * @ORM\Id()
-     * @ORM\ManyToOne(targetEntity="Employee", inversedBy="experince")
+     * @ORM\ManyToOne(targetEntity="Employee")
      * @ORM\JoinColumn(name="employee_id", referencedColumnName="id", nullable=false)
      */
     private $employee;
@@ -26,7 +26,7 @@ class Experience
      * @var Profession
      *
      * @ORM\Id()
-     * @ORM\ManyToOne(targetEntity="Profession", inversedBy="employees")
+     * @ORM\ManyToOne(targetEntity="Profession")
      * @ORM\JoinColumn(name="profession_id", referencedColumnName="id", nullable=false)
      */
     private $profession;

@@ -2,6 +2,7 @@
 
 namespace JobBag\Domain\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -68,7 +69,6 @@ class Employer
 
     /**
      * @return Person|null
-     * @Groups({"public"})
      */
     public function getPerson(): ?Person
     {
@@ -115,5 +115,14 @@ class Employer
     public function getAvatar(): string
     {
         return $this->person instanceof Person ? $this->person->getAvatar() : '';
+    }
+
+    /**
+     * @return Collection|PersonLanguage[]
+     * @Groups({"public"})
+     */
+    public function getLanguages(): ?Collection
+    {
+        return $this->person instanceof Person ? $this->person->getLanguages() : null;
     }
 }

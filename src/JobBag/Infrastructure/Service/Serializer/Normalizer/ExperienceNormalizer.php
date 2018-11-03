@@ -2,7 +2,7 @@
 
 namespace JobBag\Infrastructure\Service\Serializer\Normalizer;
 
-use JobBag\Domain\Entity\Person;
+use JobBag\Domain\Entity\Experience;
 use Symfony\Component\Serializer\Exception\BadMethodCallException;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -15,27 +15,17 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterface, CacheableSupportsMethodInterface
+class ExperienceNormalizer implements SerializerAwareInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
     use SerializerAwareTrait;
 
-    private static $defaultValues = [
-        'avatar' => ''
-    ];
-
     private static $requiredAttributes = [
-        'name'      => 'Person name',
-        'languages' => 'Languages',
-        'email'     => 'Email',
-        'password'  => 'Password',
-        'roles'     => 'Roles'
+        'professionId' => 'Profession Id',
+        'years'        => 'Years of experince'
     ];
 
-    private static $userAttributes = [
-        'avatar'   => 'avatar',
-        'email'    => 'username',
-        'password' => 'password',
-        'roles'    => 'roles'
+    private static $professionAttributes = [
+        'professionId' => 'profession'
     ];
 
     /**
@@ -47,9 +37,8 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      * EmployeeDenormalizer constructor.
      * @param ObjectNormalizer $objectNormalizer
      */
-    public function __construct(
-        ObjectNormalizer $objectNormalizer
-    ) {
+    public function __construct(ObjectNormalizer $objectNormalizer)
+    {
         $this->objectNormalizer = $objectNormalizer;
     }
 
@@ -61,7 +50,7 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      * @param string $format Format the given data was extracted from
      * @param array $context Options available to the denormalizer
      *
-     * @return object | Person
+     * @return object | Experience
      *
      * @throws BadMethodCallException   Occurs when the normalizer is not called in an expected context
      * @throws InvalidArgumentException Occurs when the arguments are not coherent or not supported
@@ -72,7 +61,6 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = $this->setDefaults($data);
         $this->validateAttributes($data);
 
         $data = $this->remapAttributes($data);
@@ -91,7 +79,7 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      */
     public function supportsDenormalization($data, $type, $format = null): bool
     {
-        return $type === Person::class;
+        return $type === Experience::class;
     }
 
     /**
@@ -104,15 +92,6 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
 
     /**
      * @param array $data
-     * @return array
-     */
-    private function setDefaults(array $data): array
-    {
-        return array_merge(self::$defaultValues, $data);
-    }
-
-    /**
-     * @param array $data
      */
     private function validateAttributes(array $data): void
     {
@@ -120,12 +99,6 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
             if (!array_key_exists($name, $data)) {
                 throw new InvalidArgumentException($label . ' is required.');
             }
-        }
-
-        if (\count($data['languages']) === 0) {
-            throw new InvalidArgumentException(
-                sprintf('At least a %s should be specified.', self::$requiredAttributes['languages'])
-            );
         }
     }
 
@@ -135,12 +108,12 @@ class PersonNormalizer implements SerializerAwareInterface, DenormalizerInterfac
      */
     private function remapAttributes(array $data): array
     {
-        $userData = []; //'role' => ['EMPLOYER']
-        foreach (self::$userAttributes as $attrName => $newAttrName) {
-            $userData[$newAttrName] = $data[$attrName];
+        $professionData = [];
+        foreach (self::$professionAttributes as $attrName => $newAttrName) {
+            $professionData[$newAttrName] = $data[$attrName];
             unset($data[$attrName]);
         }
 
-        return array_merge($data, ['user' => $userData]);
+        return array_merge($data, $professionData);
     }
 }

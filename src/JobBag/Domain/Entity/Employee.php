@@ -60,7 +60,7 @@ class Employee
     private $scholarship;
 
     /**
-     * @var Collection|null
+     * @var Collection|Experience[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Experience",
@@ -94,7 +94,6 @@ class Employee
 
     /**
      * @return int|null
-     * @Groups("public")
      */
     public function getId(): ?int
     {
@@ -123,6 +122,7 @@ class Employee
 
     /**
      * @return Person|null
+     * @Groups({"public"})
      */
     public function getPerson(): ?Person
     {
@@ -193,30 +193,12 @@ class Employee
     }
 
     /**
-     * @return Collection|null
+     * @return Collection|Experience[]
      * @Groups({"public"})
      */
-    public function getExperience(): ?Collection
+    public function getExperience(): Collection
     {
         return $this->experience;
-    }
-
-    /**
-     * @param Collection|null $experiences
-     * @return Employee
-     * @Groups({"fillable"})
-     */
-    public function setExperience(?Collection $experiences): Employee
-    {
-        foreach ($experiences as $experience) {
-            if (!$experience instanceof Experience) {
-                throw new RuntimeException('Esta intentando añadir una experiencia incorrecta');
-            }
-
-            $this->addExperience($experience);
-        }
-
-        return $this;
     }
 
     /**
@@ -234,17 +216,16 @@ class Employee
     }
 
     /**
-     * @param Profession $profession
-     * @param int $years
+     * @param Experience $experience
      * @return Employee
      */
-    public function addProfessionalExperience(Profession $profession, int $years): Employee
+    public function removeExperience(Experience $experience): Employee
     {
-        $newExperience = new Experience();
-        $newExperience->setProfession($profession);
-        $newExperience->setYears($years);
+        if ($this->experience->contains($experience)) {
+            $this->experience->removeElement($experience);
+        }
 
-        return $this->addExperience($newExperience);
+        return $this;
     }
 
     /**
@@ -291,44 +272,44 @@ class Employee
 
         return $this;
     }
-
-    /**
-     * @return array|Collection|PersonLanguage[]
-     * @Groups({"public"})
-     */
-    public function getLanguages(): Collection
-    {
-        return $this->person instanceof Person ? $this->person->getLanguages() : [];
-    }
-
-    /**
-     * Person entity properties
-     */
-
-    /**
-     * @return string
-     * @Groups({"public"})
-     */
-    public function getName(): string
-    {
-        return $this->person instanceof Person ? $this->person->getName() : '';
-    }
-
-    /**
-     * @return string
-     * @Groups({"public"})
-     */
-    public function getEmail(): string
-    {
-        return $this->person instanceof Person ? $this->person->getEmail() : '';
-    }
-
-    /**
-     * @return string
-     * @Groups({"public"})
-     */
-    public function getAvatar(): string
-    {
-        return $this->person instanceof Person ? $this->person->getAvatar() : '';
-    }
+//
+//    /**
+//     * @return array|Collection|PersonLanguage[]
+//     * @Groups({"public"})
+//     */
+//    public function getLanguages(): Collection
+//    {
+//        return $this->person instanceof Person ? $this->person->getLanguages() : [];
+//    }
+//
+//    /**
+//     * Person entity properties
+//     */
+//
+//    /**
+//     * @return string
+//     * @Groups({"public"})
+//     */
+//    public function getName(): string
+//    {
+//        return $this->person instanceof Person ? $this->person->getName() : '';
+//    }
+//
+//    /**
+//     * @return string
+//     * @Groups({"public"})
+//     */
+//    public function getEmail(): string
+//    {
+//        return $this->person instanceof Person ? $this->person->getEmail() : '';
+//    }
+//
+//    /**
+//     * @return string
+//     * @Groups({"public"})
+//     */
+//    public function getAvatar(): string
+//    {
+//        return $this->person instanceof Person ? $this->person->getAvatar() : '';
+//    }
 }

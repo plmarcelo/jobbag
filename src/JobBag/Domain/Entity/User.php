@@ -2,6 +2,7 @@
 
 namespace JobBag\Domain\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -83,26 +84,22 @@ class User implements UserInterface, \Serializable
     private $updatedAt;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="user")
+     * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="user_role",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="role_id", referencedColumnName="id")
-     *   }
+     *   joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      */
-    private $role;
+    private $roles;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -234,21 +231,13 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection|Role[]
-     */
-    public function getRole(): Collection
-    {
-        return $this->role;
-    }
-
-    /**
      * @param Role $role
      * @return User
      */
     public function addRole(Role $role): self
     {
-        if (!$this->role->contains($role)) {
-            $this->role[] = $role;
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
         }
 
         return $this;
@@ -260,8 +249,8 @@ class User implements UserInterface, \Serializable
      */
     public function removeRole(Role $role): self
     {
-        if ($this->role->contains($role)) {
-            $this->role->removeElement($role);
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
         }
 
         return $this;
@@ -328,11 +317,11 @@ class User implements UserInterface, \Serializable
      * and populated in any number of different ways when the user object
      * is created.
      *
-     * @return (Role|string)[] The user roles
+     * @return Collection|(Role|string)[] The user roles
      */
-    public function getRoles()
+    public function getRoles(): Collection
     {
-        return ['ROLE_USER'];
+        return $this->roles;
     }
 
     /**

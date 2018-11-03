@@ -61,19 +61,18 @@ class Person
     }
 
     /**
-     * @return int
-     * @Groups({"public"})
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @return string
+     * @return null|string
      * @Groups({"public"})
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -91,6 +90,7 @@ class Person
 
     /**
      * @return User|null
+     * @Groups({"public"})
      */
     public function getUser(): ?User
     {
@@ -153,20 +153,6 @@ class Person
         }
 
         return $this;
-    }
-
-    /**
-     * @param Language $language
-     * @param bool $default
-     * @return Person
-     */
-    public function addKnownLanguage(Language $language, bool $default = true): Person
-    {
-        $knownLanguage = new PersonLanguage();
-        $knownLanguage->setLanguage($language);
-        $knownLanguage->setMotherTongue($default);
-
-        return $this->addLanguage($knownLanguage);
     }
 
     /**

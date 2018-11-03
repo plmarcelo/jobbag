@@ -17,7 +17,7 @@ class PersonLanguage
      * @var Person
      *
      * @ORM\Id()
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="languages")
+     * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
      */
     private $person;
