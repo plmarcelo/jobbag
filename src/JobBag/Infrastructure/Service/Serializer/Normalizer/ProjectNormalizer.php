@@ -45,7 +45,9 @@ class ProjectNormalizer implements SerializerAwareInterface, DenormalizerInterfa
     public function __construct(ObjectNormalizer $objectNormalizer, TokenStorageInterface $tokenStorage)
     {
         $this->objectNormalizer = $objectNormalizer;
-        $this->user = $tokenStorage->getToken()->getUser();
+        if (null !== $tokenStorage->getToken()) {
+            $this->user = $tokenStorage->getToken()->getUser();
+        }
     }
 
     /**
