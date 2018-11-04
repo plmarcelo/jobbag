@@ -115,4 +115,11 @@ class ProjectStatus
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return $this->getDescription() ?: '';
+    }
 }

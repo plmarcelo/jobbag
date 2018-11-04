@@ -3,11 +3,13 @@
 namespace JobBag\Domain\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Project
  *
- * @ORM\Table(name="project", indexes={@ORM\Index(name="idx_project_client_id", columns={"client_id"}), @ORM\Index(name="idx_project_profession_id", columns={"profession_id"}), @ORM\Index(name="idx_project_employee_id", columns={"employee_id"}), @ORM\Index(name="idx_project_project_status_id", columns={"project_status_id"})})
+ * @ORM\Table(name="project", indexes={@ORM\Index(name="idx_project_employer_id", columns={"employer_id"}), @ORM\Index(name="idx_project_profession_id", columns={"profession_id"}), @ORM\Index(name="idx_project_employee_id", columns={"employee_id"}), @ORM\Index(name="idx_project_project_status_id", columns={"project_status_id"})})
  * @ORM\Entity
  */
 class Project
@@ -36,11 +38,11 @@ class Project
     private $description;
 
     /**
-     * @var string|null
+     * @var float|null
      *
-     * @ORM\Column(name="price", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00"})
+     * @ORM\Column(name="price", type="decimal", precision=9, scale=2, nullable=true, options={"default"=0})
      */
-    private $price = '0.00';
+    private $price = 0;
 
     /**
      * @var \DateTime
@@ -57,118 +59,138 @@ class Project
     private $updatedAt;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="employer_id", referencedColumnName="id")
      */
-    private $client;
+    private $employer;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
      */
     private $employee;
 
     /**
-     * @var \Profession
+     * @var Profession
      *
      * @ORM\ManyToOne(targetEntity="Profession")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="profession_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="profession_id", referencedColumnName="id")
      */
     private $profession;
 
     /**
-     * @var \ProjectStatus
+     * @var ProjectStatus
      *
      * @ORM\ManyToOne(targetEntity="ProjectStatus")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="project_status_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="project_status_id", referencedColumnName="id")
      */
     private $projectStatus;
 
+    /**
+     * @return int|null
+     * @Groups({"public"})
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     * @Groups({"public"})
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(string $title): Project
     {
         $this->title = $title;
 
         return $this;
     }
 
+    /**
+     * @return null|string
+     * @Groups({"public"})
+     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(string $description): Project
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getPrice()
+    /**
+     * @return null|float
+     * @Groups({"public"})
+     */
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice($price): self
+    public function setPrice($price): Project
     {
         $this->price = $price;
 
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     * @Groups({"public"})
+     */
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): Project
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     * @Groups({"public"})
+     */
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): Project
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getClient(): ?User
+    public function getEmployer(): ?User
     {
-        return $this->client;
+        return $this->employer;
     }
 
-    public function setClient(?User $client): self
+    /**
+     * @param User|UserInterface|null $employer
+     * @return Project
+     */
+    public function setEmployer(?User $employer): Project
     {
-        $this->client = $client;
+        $this->employer = $employer;
 
         return $this;
     }
@@ -178,7 +200,11 @@ class Project
         return $this->employee;
     }
 
-    public function setEmployee(?User $employee): self
+    /**
+     * @param User|null $employee
+     * @return Project
+     */
+    public function setEmployee(?User $employee): Project
     {
         $this->employee = $employee;
 
@@ -190,24 +216,42 @@ class Project
         return $this->profession;
     }
 
-    public function setProfession(?Profession $profession): self
+    /**
+     * @param Profession|null $profession
+     * @return Project
+     */
+    public function setProfession(?Profession $profession): Project
     {
         $this->profession = $profession;
 
         return $this;
     }
 
+    /**
+     * @return ProjectStatus|null
+     */
     public function getProjectStatus(): ?ProjectStatus
     {
         return $this->projectStatus;
     }
 
-    public function setProjectStatus(?ProjectStatus $projectStatus): self
+    /**
+     * @param ProjectStatus|null $projectStatus
+     * @return Project
+     */
+    public function setProjectStatus(?ProjectStatus $projectStatus): Project
     {
         $this->projectStatus = $projectStatus;
 
         return $this;
     }
 
-
+    /**
+     * @return null|string
+     * @Groups({"public"})
+     */
+    public function getStatus(): ?string
+    {
+        return $this->projectStatus instanceof ProjectStatus ? $this->projectStatus->getDescription() : '';
+    }
 }
