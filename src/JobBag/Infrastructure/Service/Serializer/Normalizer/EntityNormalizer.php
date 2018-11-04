@@ -65,4 +65,13 @@ class EntityNormalizer extends ObjectNormalizer
 
         return $entity;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function supportsNormalization($data, $format = null)
+    {
+        return false;
+    }
+
 }

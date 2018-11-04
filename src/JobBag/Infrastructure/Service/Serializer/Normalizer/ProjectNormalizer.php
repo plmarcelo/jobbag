@@ -23,6 +23,10 @@ class ProjectNormalizer implements SerializerAwareInterface, DenormalizerInterfa
 
     public const NEW_PROJECT = 'new';
 
+    private static $professionAttributes = [
+        'professionId' => 'profession'
+    ];
+
     /**
      * @var ObjectNormalizer
      */
@@ -65,6 +69,8 @@ class ProjectNormalizer implements SerializerAwareInterface, DenormalizerInterfa
     {
         $data['projectStatus'] = self::NEW_PROJECT;
 
+        $data = $this->remapAttributes($data);
+
         /**
          * @var Project $project
          */
@@ -93,5 +99,20 @@ class ProjectNormalizer implements SerializerAwareInterface, DenormalizerInterfa
     public function hasCacheableSupportsMethod(): bool
     {
         return true;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function remapAttributes(array $data): array
+    {
+        $professionData = [];
+        foreach (self::$professionAttributes as $attrName => $newAttrName) {
+            $professionData[$newAttrName] = $data[$attrName];
+            unset($data[$attrName]);
+        }
+
+        return array_merge($data, $professionData);
     }
 }

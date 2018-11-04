@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Table(name="project", indexes={@ORM\Index(name="idx_project_employer_id", columns={"employer_id"}), @ORM\Index(name="idx_project_profession_id", columns={"profession_id"}), @ORM\Index(name="idx_project_employee_id", columns={"employee_id"}), @ORM\Index(name="idx_project_project_status_id", columns={"project_status_id"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Project
 {
@@ -45,14 +46,28 @@ class Project
     private $price = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(name="estimated_start_date", type="date", nullable=true)
+     */
+    private $estimatedStartDate;
+
+    /**
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(name="estimated_end_date", type="date", nullable=true)
+     */
+    private $estimatedEndDate;
+
+    /**
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
@@ -179,6 +194,20 @@ class Project
         return $this;
     }
 
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updateTimestamps(): void
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+
+        if ($this->getCreatedAt() === null) {
+            $this->setCreatedAt(new \DateTime('now'));
+        }
+    }
+
     public function getEmployer(): ?User
     {
         return $this->employer;
@@ -253,5 +282,45 @@ class Project
     public function getStatus(): ?string
     {
         return $this->projectStatus instanceof ProjectStatus ? $this->projectStatus->getDescription() : '';
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getEstimatedStartDate(): ?\DateTimeInterface
+    {
+        return $this->estimatedStartDate;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $estimatedStartDate
+     * @return Project
+     * @Groups({"public"})
+     */
+    public function setEstimatedStartDate(?\DateTimeInterface $estimatedStartDate): Project
+    {
+        $this->estimatedStartDate = $estimatedStartDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getEstimatedEndDate(): ?\DateTimeInterface
+    {
+        return $this->estimatedEndDate;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $estimatedEndDate
+     * @return Project
+     * @Groups({"public"})
+     */
+    public function setEstimatedEndDate(?\DateTimeInterface $estimatedEndDate): Project
+    {
+        $this->estimatedEndDate = $estimatedEndDate;
+
+        return $this;
     }
 }
