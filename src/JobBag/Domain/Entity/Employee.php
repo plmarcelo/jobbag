@@ -122,7 +122,6 @@ class Employee
 
     /**
      * @return Person|null
-     * @Groups({"public"})
      */
     public function getPerson(): ?Person
     {
@@ -272,44 +271,53 @@ class Employee
 
         return $this;
     }
-//
-//    /**
-//     * @return array|Collection|PersonLanguage[]
-//     * @Groups({"public"})
-//     */
-//    public function getLanguages(): Collection
-//    {
-//        return $this->person instanceof Person ? $this->person->getLanguages() : [];
-//    }
-//
-//    /**
-//     * Person entity properties
-//     */
-//
-//    /**
-//     * @return string
-//     * @Groups({"public"})
-//     */
-//    public function getName(): string
-//    {
-//        return $this->person instanceof Person ? $this->person->getName() : '';
-//    }
-//
-//    /**
-//     * @return string
-//     * @Groups({"public"})
-//     */
-//    public function getEmail(): string
-//    {
-//        return $this->person instanceof Person ? $this->person->getEmail() : '';
-//    }
-//
-//    /**
-//     * @return string
-//     * @Groups({"public"})
-//     */
-//    public function getAvatar(): string
-//    {
-//        return $this->person instanceof Person ? $this->person->getAvatar() : '';
-//    }
+
+    /**
+     * Person entity properties
+     */
+
+    /**
+     * @return int|null
+     * @Groups({"public"})
+     */
+    public function getUserId(): ?int
+    {
+        return $this->person instanceof Person ? $this->person->getUserId() : null;
+    }
+
+    /**
+     * @return string
+     * @Groups({"public"})
+     */
+    public function getName(): string
+    {
+        return $this->person instanceof Person ? $this->person->getName() : '';
+    }
+
+    /**
+     * @return string
+     * @Groups({"public"})
+     */
+    public function getEmail(): string
+    {
+        return $this->person instanceof Person ? $this->person->getEmail() : '';
+    }
+
+    /**
+     * @return string
+     * @Groups({"public"})
+     */
+    public function getAvatar(): string
+    {
+        return $this->person instanceof Person ? $this->person->getAvatar() : '';
+    }
+
+    /**
+     * @return array|Collection|PersonLanguage[]
+     * @Groups({"public"})
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->person instanceof Person ? $this->person->getLanguages() : [];
+    }
 }

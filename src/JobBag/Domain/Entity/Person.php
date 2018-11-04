@@ -156,6 +156,14 @@ class Person
     }
 
     /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->user->getId();
+    }
+
+    /**
      * @return null|string
      * @Groups({"public"})
      */

@@ -3,6 +3,7 @@
 namespace JobBag\Infrastructure\Service\Serializer\Normalizer;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
@@ -19,6 +20,7 @@ class EntityNormalizer extends ObjectNormalizer
      * @var EntityManagerInterface
      */
     protected $entityManager;
+
     /**
      * Entity normalizer
      * @param EntityManagerInterface $entityManager
@@ -50,8 +52,17 @@ class EntityNormalizer extends ObjectNormalizer
     /**
      * @inheritDoc
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($id, $class, $format = null, array $context = [])
     {
-        return $this->entityManager->find($class, $data);
+        $entity = $this->entityManager->find($class, $id);
+
+        if (null === $entity) {
+            $baseClassName = preg_replace('/.*\\\\/m', '', $class);
+            throw new UnexpectedValueException(
+                sprintf('No %s found with id %s', $baseClassName, $id)
+            );
+        }
+
+        return $entity;
     }
 }

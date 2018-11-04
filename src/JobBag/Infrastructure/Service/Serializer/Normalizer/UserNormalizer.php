@@ -2,7 +2,9 @@
 
 namespace JobBag\Infrastructure\Service\Serializer\Normalizer;
 
-use JobBag\Domain\Entity\Employee;
+use JobBag\Domain\Entity\Person;
+use JobBag\Domain\Entity\User;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\BadMethodCallException;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -15,33 +17,14 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterface, CacheableSupportsMethodInterface
+class UserNormalizer implements SerializerAwareInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
     use SerializerAwareTrait;
 
-    private static $defaultValues = [
-        'avatar' => '',
-        'resume' => '',
-        'roles'  => ['EMPLOYEE']
-    ];
-
-    private static $requiredAttributes = [
-        'name'               => 'Employee name',
-        'languages'          => 'Languages',
-        'workingLocationIds' => 'Working area',
-        'experience'         => 'Experince',
-        'email'              => 'Email',
-        'password'           => 'Password'
-    ];
-
-    private static $personAttributes = [
-        'name'      => 'name',
-        'languages' => 'languages',
-        'avatar'    => 'avatar',
-        'email'     => 'email',
-        'password'  => 'password',
-        'roles'     => 'roles'
-    ];
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
 
     /**
      * @var ObjectNormalizer
@@ -50,12 +33,13 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
 
     /**
      * EmployeeDenormalizer constructor.
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @param ObjectNormalizer $objectNormalizer
      */
-    public function __construct(
-        ObjectNormalizer $objectNormalizer
-    ) {
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, ObjectNormalizer $objectNormalizer)
+    {
         $this->objectNormalizer = $objectNormalizer;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -66,7 +50,7 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
      * @param string $format Format the given data was extracted from
      * @param array $context Options available to the denormalizer
      *
-     * @return object|Employee
+     * @return object | User
      *
      * @throws BadMethodCallException   Occurs when the normalizer is not called in an expected context
      * @throws InvalidArgumentException Occurs when the arguments are not coherent or not supported
@@ -77,10 +61,7 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = $this->setDefaults($data);
-        $this->validateAttributes($data);
-
-        $data = $this->remapAttributes($data);
+        $data['password'] = $this->passwordEncoder->encodePassword(new User(), $data['password']);
 
         return $this->objectNormalizer->denormalize($data, $class, $format, $context);
     }
@@ -94,9 +75,9 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
      *
      * @return bool
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
-        return $type === Employee::class;
+        return $type === User::class;
     }
 
     /**
@@ -105,49 +86,5 @@ class EmployeeNormalizer implements SerializerAwareInterface, DenormalizerInterf
     public function hasCacheableSupportsMethod(): bool
     {
         return true;
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    private function setDefaults(array $data): array
-    {
-        return array_merge(self::$defaultValues, $data);
-    }
-
-    /**
-     * @param array $data
-     */
-    private function validateAttributes(array $data): void
-    {
-        foreach (self::$requiredAttributes as $name => $label) {
-            if (!array_key_exists($name, $data)) {
-                throw new InvalidArgumentException($label . ' is required.');
-            }
-        }
-
-        if (\count($data['languages']) === 0) {
-            throw new InvalidArgumentException(
-                sprintf('At least a %s should be specified.', self::$requiredAttributes['languages'])
-            );
-        }
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    private function remapAttributes(array $data): array
-    {
-        $personData = [];
-        foreach (self::$personAttributes as $attrName => $newAttrName) {
-            $personData[$newAttrName] = $data[$attrName];
-            unset($data[$attrName]);
-        }
-
-        $data['workingLocations'] = $data['workingLocationIds'];
-        unset($data['workingLocationIds']);
-        return array_merge($data, ['person' => $personData]);
     }
 }

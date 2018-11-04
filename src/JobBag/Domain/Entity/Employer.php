@@ -40,7 +40,6 @@ class Employer
 
     /**
      * @return int|null
-     * @Groups({"public"})
      */
     public function getId(): ?int
     {
@@ -89,6 +88,15 @@ class Employer
     /**
      * Person entity properties
      */
+
+    /**
+     * @return int|null
+     * @Groups({"public"})
+     */
+    public function getUserId(): ?int
+    {
+        return $this->person instanceof Person ? $this->person->getUserId() : null;
+    }
 
     /**
      * @return string
