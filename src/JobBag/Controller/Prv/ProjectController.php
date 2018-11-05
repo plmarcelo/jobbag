@@ -2,6 +2,7 @@
 
 namespace JobBag\Controller\Prv;
 
+use JobBag\Application\Project\FetchProjectsList;
 use JobBag\Domain\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ProjectController extends AbstractController
 {
-
     /**
      * @Route("", name="create_project", methods={"POST"})
      * @param Request $request
@@ -31,5 +31,26 @@ class ProjectController extends AbstractController
         $entityManager->flush();
 
         return $this->json($project, 200, [], ['groups' => ['public']]);
+    }
+
+    /**
+     * @Route("", name="list_projects", methods={"GET"})
+     * @param Request $request
+     * @param FetchProjectsList $projectsFetcher
+     * @return mixed
+     */
+    public function list(Request $request, FetchProjectsList $projectsFetcher)
+    {
+
+        $projects = $projectsFetcher->fetchLatest($request->get('since'), $request->get('limit'));
+
+        if ($projects->isEmpty()) {
+            return $this->json([
+                'type'    => 'warning',
+                'message' => 'No project found'
+            ], 404);
+        }
+
+        return $this->json($projects, 200, [], ['groups' => ['public']]);
     }
 }
