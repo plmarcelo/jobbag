@@ -323,4 +323,13 @@ class Project
 
         return $this;
     }
+
+    /**
+     * @return int|null
+     * @Groups({"public"})
+     */
+    public function getProfessionId(): ?int
+    {
+        return $this->profession instanceof Profession ? $this->profession->getId() : null;
+    }
 }

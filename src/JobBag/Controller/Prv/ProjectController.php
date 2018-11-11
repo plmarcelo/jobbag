@@ -4,6 +4,7 @@ namespace JobBag\Controller\Prv;
 
 use JobBag\Application\Project\FetchProjectsList;
 use JobBag\Domain\Entity\Project;
+use JobBag\Domain\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,7 +43,7 @@ class ProjectController extends AbstractController
     public function list(Request $request, FetchProjectsList $projectsFetcher)
     {
 
-        $projects = $projectsFetcher->fetchLatest($request->get('since'), $request->get('limit'));
+        $projects = $projectsFetcher->fetchLatest($request->get('since'), $request->get('professionId'), $request->get('limit'));
 
         if ($projects->isEmpty()) {
             return $this->json([
@@ -52,5 +53,24 @@ class ProjectController extends AbstractController
         }
 
         return $this->json($projects, 200, [], ['groups' => ['public']]);
+    }
+
+    /**
+     * @Route("/{id}", name="show_project", methods={"GET"})
+     * @param int $id
+     * @return mixed
+     */
+    public function show(int $id, ProjectRepository $projectRepository)
+    {
+        $project = $projectRepository->find($id);
+
+        if ($project === null) {
+            return $this->json([
+                'type'    => 'error',
+                'message' => 'Project does not exists'
+            ], 404);
+        }
+
+        return $this->json($project, 200, [], ['groups' => ['public']]);
     }
 }

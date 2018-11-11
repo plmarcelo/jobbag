@@ -24,11 +24,16 @@ class FetchProjectsList
 
     /**
      * @param string $since
+     * @param null|int $professionId
      * @param null|int $limit
      * @return Collection|Project[]
      */
-    public function fetchLatest(string $since, $limit = null): Collection
+    public function fetchLatest(string $since, $professionId = null, $limit = null): Collection
     {
+        if ($professionId !== null) {
+            return $this->projectRepository->findLatestByProfessionId($since, $professionId, $limit);
+        }
+
         return $this->projectRepository->findLatest($since, $limit);
     }
 }

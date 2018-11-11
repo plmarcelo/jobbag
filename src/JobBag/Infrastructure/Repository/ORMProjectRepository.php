@@ -45,4 +45,31 @@ class ORMProjectRepository extends ServiceEntityRepository implements ProjectRep
 
         return new ArrayCollection($result);
     }
+
+    /**
+     * @param string $since Find all created since this value
+     * @param int $professionId
+     * @param int $limit Find latest n elements. All in case value is null
+     *
+     * @return Collection|Project[]
+     */
+    public function findLatestByProfessionId(string $since, int $professionId, int $limit = null): Collection
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.createdAt > :since')
+            ->andWhere('p.profession = :profession')
+            ->setParameter('since', $since)
+            ->setParameter('profession', $professionId)
+            ->orderBy('p.createdAt', 'ASC');
+
+        if ($limit !== null) {
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $result = $queryBuilder
+            ->getQuery()
+            ->getResult();
+
+        return new ArrayCollection($result);
+    }
 }
