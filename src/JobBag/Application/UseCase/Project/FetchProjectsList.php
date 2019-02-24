@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Application\Project;
+namespace JobBag\Application\UseCase\Project;
 
 use Doctrine\Common\Collections\Collection;
 use JobBag\Domain\Entity\Project;
@@ -35,5 +35,21 @@ class FetchProjectsList
         }
 
         return $this->projectRepository->findLatest($since, $limit);
+    }
+
+    /**
+     * @param int $locarionId
+     * @param int $professionId
+     * @param string|null $since
+     * @param int|null $limit
+     * @return Collection
+     */
+    public function fetchNewByLocationAndProfession(
+        int $locarionId,
+        int $professionId,
+        string $since = null,
+        int $limit = null
+    ): Collection {
+
     }
 }

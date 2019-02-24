@@ -43,7 +43,12 @@ class ProjectController extends AbstractController
     public function list(Request $request, FetchProjectsList $projectsFetcher)
     {
 
-        $projects = $projectsFetcher->fetchLatest($request->get('since'), $request->get('professionId'), $request->get('limit'));
+        $projects = $projectsFetcher->fetchNewByLocationAndProfession(
+            $request->get('locationId'),
+            $request->get('professionId'),
+            $request->get('since'),
+            $request->get('limit')
+        );
 
         if ($projects->isEmpty()) {
             return $this->json([
