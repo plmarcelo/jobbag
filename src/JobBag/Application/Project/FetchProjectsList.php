@@ -1,6 +1,6 @@
 <?php
 
-namespace JobBag\Application\UseCase\Project;
+namespace JobBag\Application\Project;
 
 use Doctrine\Common\Collections\Collection;
 use JobBag\Domain\Entity\Project;
